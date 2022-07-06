@@ -5,12 +5,13 @@ let isValid= function(value){
 };
 
 let isValidRequestBody = function(requestBody){
-    return Object.keys(requestBody).length != 0;
+    return Object.keys(requestBody).length === 0;
 };
 
 let validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-let validPassword = /(?i)^(?=[a-z])(?=.*[0-9])([a-z0-9!@#$%\^&*()_?+\-=]){8,15}$/;
-let validName = /^[ a-z ]+$/i;;
+let validPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+;
+let validName = /[a-zA-Z][a-zA-Z ]+[a-zA-Z]$/;
 let validPhone = /^[6-9]\d{9}$/;
 
 
