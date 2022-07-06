@@ -1,24 +1,39 @@
 const jwt = require("jsonwebtoken");
 const usermodel = require("../model/usermodel");
+const {isValid, isValidRequestBody, validEmail, validPassword, validName, validPhone}= require("../validator/validate")
+
+
+
+
+
 
 
 //login user
-let userlogin = async function (req, res) {
+let userLogin = async function (req, res) {
     try {
         let email = req.boy.email;
         let password = req.body.password;
+        
+        if(!isValidRequestBody){
+            return res.status(400).send({ status: false, message: `Please Provide your Email and Password` });
+        }
 
-        // validation
+        if(!isValid(email)){
+            return res.status(400).send({ status: false, message: `Email is required` });
+        }
 
-        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+        if (!validEmail.test(email)) {
             return res.status(400).send({ status: false, message: `Email Should be a Valid Email Address` });
         }
 
-        if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
+        if(!isValid(password)){
+            return res.status(400).send({ status: false, message: `Password is required` });
+        }
+
+        if (!(validPassword).test(password)) {
             return res.status(400).send({ status: false, message: `Password should contain atleast one number or one alphabet and should be 8 character long` });
         }
 
-        //validation end
 
         let user = await usermodel.findOne({ email: email, password: password });
         if (!user)
@@ -30,7 +45,7 @@ let userlogin = async function (req, res) {
             userId: user._id.toString(),
             batch: "radon",
             organisation: "FunctionUp",
-            iat: new Date().getTime()
+            iat: new Date()
         },
             "functionup-radon-group52",
             {
@@ -47,3 +62,5 @@ let userlogin = async function (req, res) {
 
     }
 }
+
+module.exports.userLogin=userLogin
