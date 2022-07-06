@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
  mongoose.connect("mongodb+srv://tusharbarai1:Tb88774411@cluster0.3hlrc.mongodb.net/BookManagement", {
     useNewUrlParser: true
 })
- .then(()=>console.log("mongodb Conneted"))
+ .then(()=>console.log("MongoDB Connected"))
  .catch((error)=>console.log(error))
 
  app.use('/',route);
