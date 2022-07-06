@@ -21,23 +21,31 @@ const userSchema = new mongoose.Schema ({
     email: {
         type: String,
         required : true,
-        valid_email : true, 
         unique : true,
+        lowercase: true,
         trim: true
     },
     password: {
         type: String,
         required : true,
-        unique: true,
         trim: true
     },
 
     address:{
-        street: {type: String, trim: true },
-        city: {type: String, trim: true},
-        pincode: {type: String, trim: true}
+        street: {
+            type: String,
+            trim: true
+         },
+        city: {
+            type: String, 
+            trim: true
+        },
+        pincode: {
+            type: String, 
+            trim: true
+        }
     }
     
 }, {timestamps : true});
 
-module.exports = mongoose.model ('userDB', userSchema)
+module.exports = mongoose.model ('user', userSchema)

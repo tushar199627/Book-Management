@@ -1,16 +1,16 @@
 const express=require("express");
 const mongoose=require("mongoose");
-const bodyparser=require("body-parser");
+const bodyParser=require("body-parser");
 const app=express();
 const route=require("./routes/route.js");
 
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
- mongoose.connect("mongodb+srv://Rak1800:Rakesh123@@cluster0.xntrj.mongodb.net/project3-group-52", {
+ mongoose.connect("mongodb+srv://tusharbarai1:Tb88774411@cluster0.3hlrc.mongodb.net/BookManagement", {
     useNewUrlParser: true
 })
- .then(()=>console.log("mongodb Conneted"))
+ .then(()=>console.log("MongoDB Connected"))
  .catch((error)=>console.log(error))
 
  app.use('/',route);
