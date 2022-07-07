@@ -97,18 +97,23 @@ const createBook = async function (req, res) {
 //get Book
 const bookList = async function (req, res) {
     try {
-        let query = req.query
+        let query = req.query //getting data from request body
 
+
+        //finding the book from a bookmodel
         let books = await bookmodel.find({ $and: [query, { isDeleted: false }] }).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 })
 
+
+        //sorting the title of the book in ascending order
         books.sort(function (a, b) {
             return a.title.localeCompare(b.title)
         })
 
+        //checking wheather book is present in the database
         if (books.length == 0)
             return res.status(404).send({ status: false, message: "Books are not present" })
 
-
+        //returning the response
         return res.status(200).send({ status: true, message: 'Books list', data: books })
     } catch (error) {
         res.status(500).send({ status: false, message: error.message })
@@ -122,25 +127,29 @@ const getBookById = async function (req, res) {
 
     try {
 
-        let bookId = req.params.bookId
+        let bookId = req.params.bookId //writing the bookId in the params we want to fetch detail about
 
-        if (!isValidObjectId(bookId)) {
+        if (!isValidObjectId(bookId)) { // validating bookId is a valid object Id or not
             return res.status(400).send({ status: false, msg: "Please provide a valid Book Id" });
         }
-
+        //finding the book from the bookmodel
         let findBook = await bookmodel.findById({ _id: bookId, isDeleted: false })
 
+
+        //checking wheather the book is deleted or not if it is deleted it should returnthe below response
         let deleted = findBook.isDeleted
         if (deleted == true) {
             return res.status(404).send({ status: false, msg: "Book not Found" });
         }
-
+        //checking if the findbook is empty or what
         if (findBook.length == 0) {
             return res.status(404).send({ status: false, msg: "Book not Found" });
         }
+
+        //finding the review for that particular book Id
         let findReview = await reviewmodel.find({ bookId: bookId })
 
-
+        //the data that we want to show in the response body , i stored in a variable in a  Object form
         let bookDetails = {
             "_id": `ObjectId(${findBook._id})`,
             "title": findBook.title,
@@ -169,37 +178,44 @@ const getBookById = async function (req, res) {
 const updateBook = async function (req, res) {
 
     try {
-        let bookId = req.params.bookId;
+        let bookId = req.params.bookId; //writing the bookId in the params we want to fetch detail about
 
+        //here performing validation for data
         if (!bookId) {
             return res.status(400).send({ status: false, msg: "Book Id is Required" });
         }
 
+         // validating bookId is a valid object Id or not
         if (!isValidObjectId(bookId)) {
             return res.status(400).send({ status: false, msg: "Please provide a valid Book Id" });
         }
 
+
+        //finding the book we want to update from the bookmodel
         let findBook = await bookmodel.findById({ _id: bookId })
         if (findBook.length == 0) {
             return res.status(404).send({ status: false, msg: "Book not Found" });
         }
+
+        //checking wheather the book is deleted or what, if deleted it should return the below response
         let deleted = findBook.isDeleted
         if (deleted == true) {
             return res.status(404).send({ status: false, msg: "Book not Found" });
         }
 
-        let requestBody = req.body
-        let { title, excerpt, releasedAt, ISBN } = requestBody
+        let requestBody = req.body //getting data in request body
+        let { title, excerpt, releasedAt, ISBN } = requestBody //Destructuring data coming from request body 
 
+        //validation starts
         if (!isValid(title)) {
             return res.status(400).send({ status: false, msg: "Title is Required" });
         }
-
+        //checking wheather the title of the book is present in the database ot what
         let isAllreadyExistTitle = await bookmodel.findOne({ title: title })
         if (isAllreadyExistTitle) {
             return res.status(400).send({ status: false, msg: `${title} is allready exist` });
         }
-
+        //validation
         if (!isValid(excerpt)) {
             return res.status(400).send({ status: false, msg: "Excerpt is required" });
         }
@@ -210,11 +226,13 @@ const updateBook = async function (req, res) {
             return res.status(400).send({ status: false, msg: "ISBN is required" });
         }
 
+        //checking wheather the ISBN is present in the database or what
         let isAllreadyExistISBN = await bookmodel.findOne({ ISBN: ISBN })
         if (isAllreadyExistISBN) {
             return res.status(400).send({ status: false, msg: `${ISBN} is already exist` });
-        }
+        } //  validation ends
 
+        //find the book from the bookmodel and updating it
         let bookUpdated = await bookmodel.findOneAndUpdate({ _id: bookId },
             {$set:{
                 title: requestBody.title,
@@ -234,21 +252,25 @@ const updateBook = async function (req, res) {
 
 const deleteBook = async function (req, res) {
     try {
-        let bookId = req.params.bookId
+        let bookId = req.params.bookId //writing the bookId in the params we want to fetch detail about
 
+        //here performing validation for data
         if (!bookId) {
             return res.status(400).send({ status: false, msg: "Book Id is Required" });
         }
 
+         // validating bookId is a valid object Id or not
         if (!isValidObjectId(bookId)) {
             return res.status(400).send({ status: false, msg: "Please provide a valid Book Id" });
         }
 
+        //finding the book we want to update from the bookmode
         let findBook = await bookmodel.findById({ _id: bookId })
         if (findBook.isDeleted === true) {
             return res.status(404).send({ status: false, message: "Book not Found or Already been Deleted" })
         }
 
+        //finsing the book that we want to delete and update the isDeleted as True in the database
         let deletedBook = await bookmodel.findOneAndUpdate({ _id: bookId }, { $set: { isDeleted: true, deletedAt: new Date() } }, { new: true })
         return res.status(200).send({ status: true, msg: "Book Deleted Successfully", data: deletedBook })
 
