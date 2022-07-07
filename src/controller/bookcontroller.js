@@ -204,12 +204,12 @@ const updateBook = async function (req, res) {
         }
 
         let bookUpdated = await bookmodel.findOneAndUpdate({ _id: bookId },
-            {
+            {$set:{
                 title: requestBody.title,
                 excerpt: requestBody.excerpt,
                 releasedAt: requestBody.releasedAt,
                 ISBN: requestBody.ISBN
-            },
+             } },
             { new: true })
 
         return res.status(200).send({ status: true, msg: "Book Data Updated Successfully", data: bookUpdated })
