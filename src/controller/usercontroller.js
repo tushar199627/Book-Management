@@ -1,3 +1,4 @@
+
 const jwt = require("jsonwebtoken");
 const usermodel = require("../model/usermodel");
 const { isValid, isValidRequestBody, validPassword, validCity, validPincode, validName, validPhone, validEmail } = require("../validator/validate")
