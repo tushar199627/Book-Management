@@ -122,7 +122,7 @@ const bookList = async function (req, res) {
 
 
 
-
+//get book by book Id
 const getBookById = async function (req, res) {
 
     try {
@@ -174,7 +174,7 @@ const getBookById = async function (req, res) {
 }
 
 
-
+//update book
 const updateBook = async function (req, res) {
 
     try {
@@ -250,6 +250,7 @@ const updateBook = async function (req, res) {
 }
 
 
+//delete book
 const deleteBook = async function (req, res) {
     try {
         let bookId = req.params.bookId //writing the bookId in the params we want to fetch detail about
