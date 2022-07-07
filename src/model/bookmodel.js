@@ -32,7 +32,7 @@ const bookSchema = new mongoose.Schema({
         trim: true
     },
     subcategory:{
-        type: String,
+        type: [String],
         required: true,
         trim: true
     },
@@ -47,7 +47,7 @@ const bookSchema = new mongoose.Schema({
     },
     
     deletedAt: Date,
-    publishedAt: Date
+    releasedAt: Date
 },
     { timestamps: true });
 

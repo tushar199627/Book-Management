@@ -20,9 +20,10 @@ let validPincode=/^[0-9]/;
 let validName = /[a-zA-Z][a-zA-Z ]+[a-zA-Z]$/;
 let validPhone = /^[6-9]\d{9}$/;
 
+let validString = /^[ a-z ]+$/i;
 //validation for isbn
-//let validISBN=/(-1(?:(0)|3))?:?\x20+(?(1)(?(2)(?:(?=.{13}$)\d{1,5}([ -])\d{1,7}\3\d{1,6}\3(?:\d|x)$)|(?:(?=.{17}$)97(?:8|9)([ -])\d{1,5}\4\d{1,7}\4\d{1,6}\4\d$))|(?(.{13}$)(?:\d{1,5}([ -])\d{1,7}\5\d{1,6}\5(?:\d|x)$)|(?:(?=.{17}$)97(?:8|9)([ -])\d{1,5}\6\d{1,7}\6\d{1,6}\6\d$)))/;
-let validISBN=/(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)/;
+
+let validISBN=/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
 //validation for user id 
 
 const isValidObjectId = function(objectId) {             
@@ -32,8 +33,4 @@ const isValidObjectId = function(objectId) {
 
 
 
-module.exports= {isValid, isValidRequestBody, validEmail, validPassword,validCity, validPincode, validName, validPhone}
-<<<<<<< HEAD
-
-=======
->>>>>>> 5c4fae7f5177939e5156039f88e16c6c67f8674a
+module.exports= {isValid, isValidRequestBody,isValidObjectId, validEmail, validPassword,validCity,validISBN,validString, validPincode, validName, validPhone}
