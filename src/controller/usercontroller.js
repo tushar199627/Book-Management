@@ -149,7 +149,7 @@ let userLogin = async function (req, res) {
             userId: user._id.toString(),
             batch: "radon",
             organisation: "FunctionUp",
-            iat: new Date() //here we will get the issued time
+            iat: Date.now()/1000 //here we will get the issued time
         },
             "functionup-radon-project3-group52",
             {

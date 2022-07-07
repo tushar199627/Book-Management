@@ -23,7 +23,7 @@ let validPhone = /^[6-9]\d{9}$/;
 let validString = /^[ a-z ]+$/i;
 //validation for isbn
 
-let validISBN=/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
+let validISBN=(/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/);
 //validation for user id 
 
 const isValidObjectId = function(objectId) {             
