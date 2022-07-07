@@ -10,12 +10,14 @@ const { isValid, isValidRequestBody, isValidObjectId, validISBN } = require("../
 const createBook = async function (req, res) {
 
     try {
-        let requestBody = req.body
-        let { title, excerpt, userId, ISBN, category, subcategory } = requestBody
+        let requestBody = req.body //getting data from request body
+        let { title, excerpt, userId, ISBN, category, subcategory } = requestBody //Destructuring data coming from request body
 
-        if (isValidRequestBody(requestBody)) {
+        if (isValidRequestBody(requestBody)) { //validating is there any data inside request body
             return res.status(400).send({ status: false, msg: "Please provide the Details" });
         }
+
+         //here performing validation for data
         if (!isValid(title)) {
             return res.status(400).send({ status: false, msg: "Please provide a Title or a Valid title" });
         }
@@ -34,8 +36,10 @@ const createBook = async function (req, res) {
 
         }
 
-
+        //checking wheather the user is present inside database or not
         let checkid = await usermodel.findOne({ _id: userId })
+
+        //here performing validation for data
         if (!checkid) {
             return res.status(400).send({ status: false, msg: "user dosenot exis with this user id" })
         }
@@ -55,6 +59,9 @@ const createBook = async function (req, res) {
         if (!isValid(subcategory)) {
             return res.status(400).send({ status: false, msg: "Please provide a subcategory or a Valid subcategory" });
         }
+
+
+        //checking wheather the subcategory is an array or not
         if (!Array.isArray(subcategory)) {
             return res.status(400).send({ status: false, msg: "SubCatagogy Must be in Array" });
         }
@@ -64,18 +71,21 @@ const createBook = async function (req, res) {
             }
         }
 
+
+        //checking weather the title is already present in the database or not
         let titleCheck = await bookmodel.findOne({ title: title })
         if (titleCheck) {
             return res.status(400).send({ status: false, msg: "title already exist" })
         }
-
+        //checking weather the ISBN is already present in the database or not
         let ISBNCheck = await bookmodel.findOne({ ISBN: ISBN })
         if (ISBNCheck) {
             return res.status(400).send({ status: false, msg: "ISBN already exist" })
-        }
+        } //validation ended here
 
         requestBody.releasedAt = new Date().getTime()
 
+         //after clearing all the validation document will be created
         let createBook = await bookmodel.create(requestBody)
         return res.status(201).send({ status: true, msg: "Book sucessfully Created", data: createBook })
     } catch (error) {
@@ -83,6 +93,8 @@ const createBook = async function (req, res) {
     }
 }
 
+
+//get Book
 const bookList = async function (req, res) {
     try {
         let query = req.query
@@ -245,8 +257,6 @@ const deleteBook = async function (req, res) {
         res.status(500).send({ status: false, Error: error.message })
     }
 }
-
-
 
 
 

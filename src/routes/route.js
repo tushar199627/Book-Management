@@ -8,13 +8,15 @@ const usercontroller=require("../controller/usercontroller");
 router.post("/register", usercontroller.createUser)
 router.post("/login", usercontroller.userLogin)
 
+
+//===================================================[BOOK ROUTE HANDLER]===========================================================
 router.post("/books", bookcontroller.createBook)
 router.get("/books", bookcontroller.bookList)
 router.get("/books/:bookId", bookcontroller.getBookById)
 router.put("/books/:bookId", bookcontroller.updateBook)
 router.delete("/books/:bookId", bookcontroller.deleteBook)
 
-
+//===================================================[REVIEW ROUTE HANDLER]===========================================================
 
 
 
