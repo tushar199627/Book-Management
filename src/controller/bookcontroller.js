@@ -205,7 +205,7 @@ const updateBook = async function (req, res) {
 
         let bookUpdated = await bookmodel.findOneAndUpdate({ _id: bookId },
             {
-                title: requestBody, title,
+                title: requestBody.title,
                 excerpt: requestBody.excerpt,
                 releasedAt: requestBody.releasedAt,
                 ISBN: requestBody.ISBN
