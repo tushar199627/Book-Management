@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const usermodel = require("../model/usermodel");
-const { isValid, isValidRequestBody, validEmail, validPassword,validCity, validPincode, validName, validPhone } = require("../validator/validate")
+const { isValid, isValidRequestBody, validPassword, validCity, validPincode, validName, validPhone, validEmail } = require("../validator/validate")
 
 
 //create user
@@ -108,6 +108,7 @@ let createUser = async function (req, res) {
 
 //login user
 let userLogin = async function (req, res) {
+
     try {
         let requestBody = req.body; //getting data from request body
         let { email, password } = requestBody; //Destructuring data coming from request body 
@@ -147,7 +148,7 @@ let userLogin = async function (req, res) {
             userId: user._id.toString(),
             batch: "radon",
             organisation: "FunctionUp",
-            iat: new Date().getTime()/1000 //here we will get the issued time
+            iat: new Date() //here we will get the issued time
         },
             "functionup-radon-project3-group52",
             {

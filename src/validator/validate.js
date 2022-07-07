@@ -23,3 +23,4 @@ let validPhone = /^[6-9]\d{9}$/;
 
 
 module.exports= {isValid, isValidRequestBody, validEmail, validPassword,validCity, validPincode, validName, validPhone}
+
