@@ -23,6 +23,11 @@ const createBook = async function (req, res) {
         .send({ status: false, msg: "Please provide the Details" });
     }
 
+    let findUserId= await usermodel.findById({_id:userId})
+    if(findUserId._id!=req.userId){
+        return res.status(403).send({ status: false, msg: "You are not Authorized" });
+    }
+    
     //here performing validation for data
     if (!isValid(title)) {
       return res.status(400).send({
@@ -112,6 +117,7 @@ const createBook = async function (req, res) {
     } //validation ended here
 
     requestBody.releasedAt = new Date().getTime();
+
 
     //after clearing all the validation document will be created
     let createBook = await bookmodel.create(requestBody);
