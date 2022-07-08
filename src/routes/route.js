@@ -1,8 +1,8 @@
 const express=require("express");
-
 const router =express.Router();
 const bookcontroller=require("../controller/bookcontroller");
 const usercontroller=require("../controller/usercontroller");
+const reviewcontroller =require("../controller/reviewcontroller");
 
 //===================================================[USER ROUTE HANDLER]===========================================================
 router.post("/register", usercontroller.createUser)
@@ -18,6 +18,6 @@ router.delete("/books/:bookId", bookcontroller.deleteBook)
 
 //===================================================[REVIEW ROUTE HANDLER]===========================================================
 
-
+router.put("/books/:bookId/review/:reviewId", reviewcontroller.updateReview )
 
 module.exports=router;
