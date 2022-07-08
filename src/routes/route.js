@@ -4,17 +4,18 @@ const router = express.Router();
 const bookcontroller = require("../controller/bookcontroller");
 const usercontroller = require("../controller/usercontroller");
 const reviewcontroller = require("../controller/reviewcontroller");
+const {checkAuth}= require("../middleware/auth")
 
 //===================================================[USER ROUTE HANDLER]===========================================================
 router.post("/register", usercontroller.createUser);
 router.post("/login", usercontroller.userLogin);
 
 //===================================================[BOOK ROUTE HANDLER]===========================================================
-router.post("/books", bookcontroller.createBook);
-router.get("/books", bookcontroller.bookList);
-router.get("/books/:bookId", bookcontroller.getBookById);
-router.put("/books/:bookId", bookcontroller.updateBook);
-router.delete("/books/:bookId", bookcontroller.deleteBook);
+router.post("/books",checkAuth,bookcontroller.createBook);
+router.get("/books",checkAuth, bookcontroller.bookList);
+router.get("/books/:bookId",checkAuth, bookcontroller.getBookById);
+router.put("/books/:bookId",checkAuth, bookcontroller.updateBook);
+router.delete("/books/:bookId",checkAuth, bookcontroller.deleteBook);
 
 //===================================================[REVIEW ROUTE HANDLER]===========================================================
 router.post("/books/:bookId/review", reviewcontroller.reviewBook);

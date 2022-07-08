@@ -38,8 +38,11 @@ const reviewBook = async function (req, res) {
 
     let { review, rating, reviewedBy } = requestBody;
 
-    if (isValidRequestBody(requestBody)) { //validating is there any data inside request body
-        return res.status(400).send({ status: false, msg: "Please provide the Details" });
+    if (isValidRequestBody(requestBody)) {
+      //validating is there any data inside request body
+      return res
+        .status(400)
+        .send({ status: false, msg: "Please provide the Details" });
     }
 
     if (!isValid(review)) {
@@ -83,20 +86,14 @@ const reviewBook = async function (req, res) {
       review: savedData.review,
     };
 
-    return res
-      .status(201)
-      .send({
-        status: true,
-        msg: "Review Created Successfully",
-        data: reviewDetails,
-      });
+    return res.status(201).send({
+      status: true,
+      msg: "Review Created Successfully",
+      data: reviewDetails,
+    });
   } catch (error) {
     return res.status(500).send({ status: false, msg: error.message });
   }
 };
-
-
-
-
 
 module.exports = { reviewBook };

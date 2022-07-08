@@ -179,67 +179,6 @@ let userLogin = async function (req, res) {
     let requestBody = req.body; //getting data from request body
     let { email, password } = requestBody; //Destructuring data coming from request body
 
-<<<<<<< HEAD
-    try {
-        let requestBody = req.body; //getting data from request body
-        let { email, password } = requestBody; //Destructuring data coming from request body 
-
-        if (isValidRequestBody(requestBody)) { //validating is there any data inside request body
-            return res.status(400).send({ status: false, message: `Please Provide your Email and Password` });
-        }
-
-         //here performing validation for data
-        if (!isValid(email)) {
-            return res.status(400).send({ status: false, message: `Email is required` });
-        }
-
-        if (!validEmail.test(email)) {
-            return res.status(400).send({ status: false, message: `Email Should be a Valid Email Address` });
-        }
-
-        if (!isValid(password)) {
-            return res.status(400).send({ status: false, message: `Password is required` });
-        }
-
-        if (!validPassword(password)) {
-            return res.status(400).send({ status: false, msg: "Password Should be Minimum 8 Character and Maximum 15 Character Long" });
-        }//validation ended here
-
-
-        //after clearing all the validation user will be fetched from the DB
-        let user = await usermodel.findOne({ email: email, password: password });
-        if (!user)
-            return res.status(400).send({
-                status: false,
-                msg: "Invalid Email or Password",
-            });
-
-        // here i m creating the token
-        let token = jwt.sign({
-            userId: user._id.toString(),
-            batch: "radon",
-            organisation: "FunctionUp",
-<<<<<<< HEAD
-            iat: new Date().getTime()/1000  //here we will get the issued time
-=======
-            iat: Date.now()/1000 //here we will get the issued time
->>>>>>> 37b5da2ea5e8617450665f2a6a2a8ce8fee516e5
-        },
-            "functionup-radon-project3-group52",
-            {
-                expiresIn: "2h" //here the token is valid for only 2 hour after 2 hour token will get expire
-            });
-
-        res.setHeader("x-api-key", token);
-
-            //after token created successfully then token will be provided in the response body
-        return res.status(200).send({ status: true, token: token, msg: "User Logged in Successfully" }); //sending data in response
-
-
-    } catch (error) {
-        res.status(500).send({ status: false, error: error.message })
-
-=======
     if (isValidRequestBody(requestBody)) {
       //validating is there any data inside request body
       return res
@@ -248,7 +187,6 @@ let userLogin = async function (req, res) {
           status: false,
           message: `Please Provide your Email and Password`,
         });
->>>>>>> 23f3ea5cb08e68fa1f2891b1365c80c47afb54c4
     }
 
     //here performing validation for data
