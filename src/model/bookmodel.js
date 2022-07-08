@@ -1,7 +1,14 @@
+<<<<<<< HEAD
+const mongoose = require('mongoose')
+const objectId = mongoose.Schema.Types.ObjectId
+
+const bookSchema = new mongoose.Schema({
+=======
 const mongoose = require("mongoose");
 const objectId = mongoose.Schema.Types.ObjectId;
 const bookSchema = new mongoose.Schema(
   {
+>>>>>>> 23f3ea5cb08e68fa1f2891b1365c80c47afb54c4
     title: {
       type: String,
       required: true,

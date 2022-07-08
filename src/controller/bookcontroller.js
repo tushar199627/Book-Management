@@ -305,9 +305,17 @@ const updateBook = async function (req, res) {
 };
 
 //delete book
-const deleteBook = async function (req, res) {
+   const deleteBook = async function (req, res) {
     try {
         let bookId = req.params.bookId; //writing the bookId in the params we want to fetch detail about
+
+        let book = await bookmodel.findById(bookId)
+        if (book.isDeleted === true) {
+            return res.status(404).send({ status: false, message: "No such bookId exists" })
+        }
+        let deleteBook = await bookmodel.findOneAndUpdate({ _id: bookId }, { isDeleted: true, deletedAt: new Date() }, { new: true })
+        res.status(201).send({ status: true, msg: deletedBook })
+
 
         //here performing validation for data
         if (!bookId) {
