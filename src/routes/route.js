@@ -18,5 +18,6 @@ router.delete("/books/:bookId", bookcontroller.deleteBook);
 
 //===================================================[REVIEW ROUTE HANDLER]===========================================================
 router.post("/books/:bookId/review", reviewcontroller.reviewBook);
+router.delete("/books/:bookId/review/:reviewId",reviewcontroller.deleteReview)
 
 module.exports = router;
