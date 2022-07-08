@@ -353,7 +353,7 @@ const deleteBook = async function (req, res) {
     return res.status(200).send({
       status: true,
       msg: "Book Deleted Successfully",
-      data: deletedBook,
+      data: deletedBook
     });
   } catch (error) {
     res.status(500).send({ status: false, Error: error.message });
