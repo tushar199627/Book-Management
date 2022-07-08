@@ -246,19 +246,14 @@ const updateBook = async function (req, res) {
     } catch (error) {
         return res.status(500).send({ status: false, msg: error.message });
     }
+
 }
 
-
-<<<<<<< HEAD
-
-=======
 //delete book
->>>>>>> 37b5da2ea5e8617450665f2a6a2a8ce8fee516e5
-const deleteBook = async function (req, res) {
+   const deleteBook = async function (req, res) {
     try {
         let bookId = req.params.bookId //writing the bookId in the params we want to fetch detail about
 
-<<<<<<< HEAD
         let book = await bookmodel.findById(bookId)
         if (book.isDeleted === true) {
             return res.status(404).send({ status: false, message: "No such bookId exists" })
@@ -267,9 +262,7 @@ const deleteBook = async function (req, res) {
         res.status(201).send({ status: true, msg: deletedBook })
 
 
-=======
         //here performing validation for data
->>>>>>> 37b5da2ea5e8617450665f2a6a2a8ce8fee516e5
         if (!bookId) {
             return res.status(400).send({ status: false, msg: "Book Id is Required" });
         }
@@ -303,8 +296,6 @@ const deleteBook = async function (req, res) {
 
 
 
-<<<<<<< HEAD
 module.exports = { createBook, bookList, getBookById, updateBook, deleteBook }
-=======
-module.exports = { createBook, bookList, getBookById, updateBook, deleteBook }
->>>>>>> 37b5da2ea5e8617450665f2a6a2a8ce8fee516e5
+
+
