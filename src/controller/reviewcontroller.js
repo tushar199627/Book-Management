@@ -97,6 +97,8 @@ const reviewBook = async function (req, res) {
   }
 };
 
+
+
 //update review
 const updateReview = async function (req, res) {
   try {
@@ -108,7 +110,7 @@ const updateReview = async function (req, res) {
       //validating is there any data inside request body
       return res
         .status(400)
-        .send({ status: false, msg: "Please provide the Details" });
+        .send({ status: false, msg: "Please provide the Details in the Request Body" });
     }
     if (!isValidObjectId(bookId)) {
       return res
@@ -128,7 +130,7 @@ const updateReview = async function (req, res) {
     if (!isValidObjectId(reviewId)) {
       return res
         .status(400)
-        .send({ status: false, msg: "Please Provide a valid review Id" });
+        .send({ status: false, msg: "Please Provide a Valid Review Id" });
     }
     let findReview = await reviewmodel.findById({
       _id: reviewId
@@ -143,11 +145,11 @@ const updateReview = async function (req, res) {
     let { review, rating, reviewedBy } = data;
 
     if (!isValid(review)) {
-      return res.status(400).send({ status: false, msg: "Review is required" });
+      return res.status(400).send({ status: false, msg: "Review field is required" });
     }
 
     if (!isValid(rating)) {
-      return res.status(400).send({ status: false, msg: "Rating is required" });
+      return res.status(400).send({ status: false, msg: "Rating field is required" });
     }
     if (!validRating(rating)) {
       return res
@@ -157,7 +159,7 @@ const updateReview = async function (req, res) {
     if (!isValid(reviewedBy)) {
       return res
         .status(400)
-        .send({ status: false, msg: "Reviewer Name is required" });
+        .send({ status: false, msg: "ReviewedBy field is required" });
     }
 
     let updateReview = await reviewmodel.findOneAndUpdate(
@@ -182,6 +184,9 @@ const updateReview = async function (req, res) {
     res.status(500).send({ status: false, Error: error.message });
   }
 };
+
+
+
 
 //delete review
 const deleteReview = async function (req, res) {

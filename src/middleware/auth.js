@@ -10,13 +10,13 @@ const checkAuth = function (req, res, next) {
     if (!token)
       return res
         .status(400)
-        .send({ status: false, msg: "token must be present" });
+        .send({ status: false, msg: "Token must be Present" });
     console.log(token);
 
     let decodedToken = jwt.verify(token, "functionup-radon-project3-group52");
 
     if (!decodedToken)
-      return res.status(401).send({ status: false, msg: "token is invalid" });
+      return res.status(401).send({ status: false, msg: "Please Provide a Valid Token" });
 
     req.userId = decodedToken.userId;
 
