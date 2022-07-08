@@ -22,14 +22,7 @@ const createBook = async function (req, res) {
         .status(400)
         .send({ status: false, msg: "Please provide the Details" });
     }
-
-    let findUserId = await usermodel.findById({ _id: userId });
-    if (findUserId._id != req.userId) {
-      return res
-        .status(403)
-        .send({ status: false, msg: "You are not Authorized" });
-    }
-
+    
     //here performing validation for data
     if (!isValid(title)) {
       return res.status(400).send({
@@ -58,6 +51,12 @@ const createBook = async function (req, res) {
 
     //checking wheather the user is present inside database or not
     let checkid = await usermodel.findOne({ _id: userId });
+
+    if (checkid._id != req.userId) {
+        return res
+          .status(403)
+          .send({ status: false, msg: "You are not Authorized" });
+      }
 
     //here performing validation for data
     if (!checkid) {
@@ -192,11 +191,6 @@ const getBookById = async function (req, res) {
     //checking if the findbook is empty or what
     if (findBook.length == 0) {
       return res.status(404).send({ status: false, msg: "Book not Found" });
-    }
-    if (findBook.userId != req.userId) {
-      return res
-        .status(403)
-        .send({ status: false, msg: "You are not Authorized" });
     }
 
     //finding the review for that particular book Id
