@@ -1,7 +1,7 @@
 const bookmodel = require("../model/bookmodel");
 const usermodel = require("../model/usermodel");
 const reviewmodel = require("../model/reviewmodel");
-const jwt=require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 const {
   isValid,
@@ -23,11 +23,13 @@ const createBook = async function (req, res) {
         .send({ status: false, msg: "Please provide the Details" });
     }
 
-    let findUserId= await usermodel.findById({_id:userId})
-    if(findUserId._id!=req.userId){
-        return res.status(403).send({ status: false, msg: "You are not Authorized" });
+    let findUserId = await usermodel.findById({ _id: userId });
+    if (findUserId._id != req.userId) {
+      return res
+        .status(403)
+        .send({ status: false, msg: "You are not Authorized" });
     }
-    
+
     //here performing validation for data
     if (!isValid(title)) {
       return res.status(400).send({
@@ -118,7 +120,6 @@ const createBook = async function (req, res) {
 
     requestBody.releasedAt = new Date().getTime();
 
-
     //after clearing all the validation document will be created
     let createBook = await bookmodel.create(requestBody);
     return res.status(201).send({
@@ -181,7 +182,7 @@ const getBookById = async function (req, res) {
         .send({ status: false, msg: "Please provide a valid Book Id" });
     }
     //finding the book from the bookmodel
-    let findBook = await bookmodel.findById({ _id:bookId});
+    let findBook = await bookmodel.findById({ _id: bookId });
 
     //checking wheather the book is deleted or not if it is deleted it should returnthe below response
     let deleted = findBook.isDeleted;
@@ -192,8 +193,10 @@ const getBookById = async function (req, res) {
     if (findBook.length == 0) {
       return res.status(404).send({ status: false, msg: "Book not Found" });
     }
-    if(findBook.userId!=req.userId){
-        return res.status(403).send({ status: false, msg: "You are not Authorized" });
+    if (findBook.userId != req.userId) {
+      return res
+        .status(403)
+        .send({ status: false, msg: "You are not Authorized" });
     }
 
     //finding the review for that particular book Id
@@ -253,8 +256,10 @@ const updateBook = async function (req, res) {
       return res.status(404).send({ status: false, msg: "Book not Found" });
     }
 
-    if(findBook.userId!=req.userId){
-        return res.status(403).send({ status: false, msg: "You are not Authorized" });
+    if (findBook.userId != req.userId) {
+      return res
+        .status(403)
+        .send({ status: false, msg: "You are not Authorized" });
     }
 
     let requestBody = req.body; //getting data in request body
@@ -346,8 +351,10 @@ const deleteBook = async function (req, res) {
         message: "Book not Found or Already been Deleted",
       });
     }
-    if(findBook.userId!=req.userId){
-        return res.status(403).send({ status: false, msg: "You are not Authorized" });
+    if (findBook.userId != req.userId) {
+      return res
+        .status(403)
+        .send({ status: false, msg: "You are not Authorized" });
     }
 
     //finsing the book that we want to delete and update the isDeleted as True in the database
@@ -359,7 +366,7 @@ const deleteBook = async function (req, res) {
     return res.status(200).send({
       status: true,
       msg: "Book Deleted Successfully",
-      data: deletedBook
+      data: deletedBook,
     });
   } catch (error) {
     res.status(500).send({ status: false, Error: error.message });
