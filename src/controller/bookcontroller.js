@@ -1,6 +1,7 @@
 const bookmodel = require("../model/bookmodel");
 const usermodel = require("../model/usermodel");
 const reviewmodel = require("../model/reviewmodel");
+const jwt=require("jsonwebtoken")
 
 const {
   isValid,
@@ -24,21 +25,17 @@ const createBook = async function (req, res) {
 
     //here performing validation for data
     if (!isValid(title)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          msg: "Please provide a Title or a Valid title",
-        });
+      return res.status(400).send({
+        status: false,
+        msg: "Please provide a Title or a Valid title",
+      });
     }
 
     if (!isValid(excerpt)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          msg: "Please provide a excerpt or a Valid excerpt",
-        });
+      return res.status(400).send({
+        status: false,
+        msg: "Please provide a excerpt or a Valid excerpt",
+      });
     }
     if (isValidRequestBody(userId)) {
       return res
@@ -67,30 +64,24 @@ const createBook = async function (req, res) {
         .send({ status: false, message: " ISBN is required" });
     }
     if (!validISBN.test(ISBN)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          message: " please provide  valid ISBN and should be 10 or 13 digits",
-        });
+      return res.status(400).send({
+        status: false,
+        message: " please provide  valid ISBN and should be 10 or 13 digits",
+      });
     }
 
     if (!isValid(category)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          msg: "Please provide a category or a Valid category",
-        });
+      return res.status(400).send({
+        status: false,
+        msg: "Please provide a category or a Valid category",
+      });
     }
 
     if (!isValid(subcategory)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          msg: "Please provide a subcategory or a Valid subcategory",
-        });
+      return res.status(400).send({
+        status: false,
+        msg: "Please provide a subcategory or a Valid subcategory",
+      });
     }
 
     //checking wheather the subcategory is an array or not
@@ -124,13 +115,11 @@ const createBook = async function (req, res) {
 
     //after clearing all the validation document will be created
     let createBook = await bookmodel.create(requestBody);
-    return res
-      .status(201)
-      .send({
-        status: true,
-        msg: "Book sucessfully Created",
-        data: createBook,
-      });
+    return res.status(201).send({
+      status: true,
+      msg: "Book sucessfully Created",
+      data: createBook,
+    });
   } catch (error) {
     return res.status(500).send({ status: false, msg: error.message });
   }
@@ -186,7 +175,7 @@ const getBookById = async function (req, res) {
         .send({ status: false, msg: "Please provide a valid Book Id" });
     }
     //finding the book from the bookmodel
-    let findBook = await bookmodel.findById({ _id: bookId, isDeleted: false });
+    let findBook = await bookmodel.findById({ _id:bookId});
 
     //checking wheather the book is deleted or not if it is deleted it should returnthe below response
     let deleted = findBook.isDeleted;
@@ -196,6 +185,9 @@ const getBookById = async function (req, res) {
     //checking if the findbook is empty or what
     if (findBook.length == 0) {
       return res.status(404).send({ status: false, msg: "Book not Found" });
+    }
+    if(findBook.userId!=req.userId){
+        return res.status(403).send({ status: false, msg: "You are not Authorized" });
     }
 
     //finding the review for that particular book Id
@@ -255,6 +247,10 @@ const updateBook = async function (req, res) {
       return res.status(404).send({ status: false, msg: "Book not Found" });
     }
 
+    if(findBook.userId!=req.userId){
+        return res.status(403).send({ status: false, msg: "You are not Authorized" });
+    }
+
     let requestBody = req.body; //getting data in request body
     let { title, excerpt, releasedAt, ISBN } = requestBody; //Destructuring data coming from request body
 
@@ -306,13 +302,11 @@ const updateBook = async function (req, res) {
       { new: true }
     );
 
-    return res
-      .status(200)
-      .send({
-        status: true,
-        msg: "Book Data Updated Successfully",
-        data: bookUpdated,
-      });
+    return res.status(200).send({
+      status: true,
+      msg: "Book Data Updated Successfully",
+      data: bookUpdated,
+    });
   } catch (error) {
     return res.status(500).send({ status: false, msg: error.message });
   }
@@ -339,13 +333,15 @@ const deleteBook = async function (req, res) {
 
     //finding the book we want to update from the bookmode
     let findBook = await bookmodel.findById({ _id: bookId });
+
     if (findBook.isDeleted === true) {
-      return res
-        .status(404)
-        .send({
-          status: false,
-          message: "Book not Found or Already been Deleted",
-        });
+      return res.status(404).send({
+        status: false,
+        message: "Book not Found or Already been Deleted",
+      });
+    }
+    if(findBook.userId!=req.userId){
+        return res.status(403).send({ status: false, msg: "You are not Authorized" });
     }
 
     //finsing the book that we want to delete and update the isDeleted as True in the database
@@ -354,13 +350,11 @@ const deleteBook = async function (req, res) {
       { $set: { isDeleted: true, deletedAt: new Date() } },
       { new: true }
     );
-    return res
-      .status(200)
-      .send({
-        status: true,
-        msg: "Book Deleted Successfully",
-        data: deletedBook,
-      });
+    return res.status(200).send({
+      status: true,
+      msg: "Book Deleted Successfully",
+      data: deletedBook,
+    });
   } catch (error) {
     res.status(500).send({ status: false, Error: error.message });
   }
