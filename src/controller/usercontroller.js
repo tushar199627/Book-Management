@@ -36,14 +36,14 @@ let createUser = async function (req, res) {
         }
 
         if (!validPhone.test(phone.trim())) {
-            return res.status(400).send({ status: false, msg: `${phone} is not valid` });
+            return res.status(400).send({ status: false, msg: `this phone number-${phone} is not valid, try an Indian Number` });
         }
 
 
         //checking is there same phone number present inside database or not
         let isAllreadyExistPhone = await usermodel.findOne({ phone: phone})
         if (isAllreadyExistPhone) {
-            return res.status(400).send({ status: false, msg: `${phone} already exist` });
+            return res.status(400).send({ status: false, msg: ` this phone number- ${phone} already exist` });
         }
 
         if (!isValid(email)) {
@@ -51,13 +51,13 @@ let createUser = async function (req, res) {
         }
 
         if (!validEmail.test(email.trim())) {
-            return res.status(400).send({ status: false, msg: `${email} is not valid` });
+            return res.status(400).send({ status: false, msg: `${email} is not valid email Id` });
         }
 
         //checking is there same Email Id present inside database or not
         let isAllreadyExistEmail = await usermodel.findOne({ email: email})
         if (isAllreadyExistEmail) {
-            return res.status(400).send({ status: false, msg: `${email} already exist` });
+            return res.status(400).send({ status: false, msg: `this email id -${email} already exist` });
         }
 
         if (!isValid(password)) {
@@ -149,7 +149,11 @@ let userLogin = async function (req, res) {
             userId: user._id.toString(),
             batch: "radon",
             organisation: "FunctionUp",
+<<<<<<< HEAD
             iat: new Date().getTime()/1000  //here we will get the issued time
+=======
+            iat: Date.now()/1000 //here we will get the issued time
+>>>>>>> 37b5da2ea5e8617450665f2a6a2a8ce8fee516e5
         },
             "functionup-radon-project3-group52",
             {
