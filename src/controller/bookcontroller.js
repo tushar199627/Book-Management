@@ -190,7 +190,7 @@ const getBookById = async function (req, res) {
     //checking wheather the book is deleted or not if it is deleted it should returnthe below response
     let deleted = findBook.isDeleted;
     if (deleted == true) {
-      return res.status(404).send({ status: false, msg: "Book not Found" });
+      return res.status(400).send({ status: false, msg: "Book already deleted" });
     }
     //checking if the findbook is empty or what
     if (findBook.length == 0) {
@@ -344,9 +344,9 @@ const deleteBook = async function (req, res) {
     let findBook = await bookmodel.findById({ _id: bookId });
 
     if (findBook.isDeleted === true) {
-      return res.status(404).send({
+      return res.status(400).send({
         status: false,
-        message: "Book not Found or Already been Deleted",
+        message: "Book Already been Deleted",
       });
     }
     if (findBook.userId != req.userId) {
