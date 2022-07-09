@@ -182,13 +182,11 @@ const getBookById = async function (req, res) {
     }
     //finding the book from the bookmodel
     let findBook = await bookmodel.findById({ _id: bookId });
-    
-    if(!findBook){
-      return res
-        .status(404)
-        .send({ status: false, msg: "Book Id not found" });
+
+    if (!findBook) {
+      return res.status(404).send({ status: false, msg: "Book Id not found" });
     }
-   
+
     //checking wheather the book is deleted or not if it is deleted it should returnthe below response
     let deleted = findBook.isDeleted;
     if (deleted == true) {
