@@ -22,7 +22,7 @@ const createBook = async function (req, res) {
         .status(400)
         .send({ status: false, msg: "Please provide the Details" });
     }
-    
+
     //here performing validation for data
     if (!isValid(title)) {
       return res.status(400).send({
@@ -53,10 +53,10 @@ const createBook = async function (req, res) {
     let checkid = await usermodel.findOne({ _id: userId });
 
     if (checkid._id != req.userId) {
-        return res
-          .status(403)
-          .send({ status: false, msg: "You are not Authorized" });
-      }
+      return res
+        .status(403)
+        .send({ status: false, msg: "You are not Authorized" });
+    }
 
     //here performing validation for data
     if (!checkid) {
@@ -182,7 +182,13 @@ const getBookById = async function (req, res) {
     }
     //finding the book from the bookmodel
     let findBook = await bookmodel.findById({ _id: bookId });
-
+    
+    if(!findBook){
+      return res
+        .status(404)
+        .send({ status: false, msg: "Book Id not found" });
+    }
+   
     //checking wheather the book is deleted or not if it is deleted it should returnthe below response
     let deleted = findBook.isDeleted;
     if (deleted == true) {
