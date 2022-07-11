@@ -20,13 +20,15 @@ let validRating = function (value) {
   if (value >= 1 && value <= 5) return true;
 };
 let validCity = /[a-zA-Z][a-zA-Z ]+[a-zA-Z]$/;
-let validPincode = /^[0-9]/;
+let validPincode = /^[1-9][0-9]{5}$/;
 let validName = /[a-zA-Z][a-zA-Z ]+[a-zA-Z]$/;
 let validPhone = /^[6-9]\d{9}$/;
 
 let validString = /^[ a-z ]+$/i;
 //validation for isbn
 
+
+let releasedDate=/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
 let validISBN = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
 //validation for user id
 
@@ -47,4 +49,5 @@ module.exports = {
   validPincode,
   validName,
   validPhone,
+  releasedDate
 };

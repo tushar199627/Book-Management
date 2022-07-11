@@ -160,7 +160,7 @@ let createUser = async function (req, res) {
     if (!validPincode.test(address.pincode)) {
       return res
         .status(400)
-        .send({ status: false, msg: "PinCode cannot be Alphabetic" });
+        .send({ status: false, msg: "Please enter a valid Pincode, it should not be alpabetic and should be 6 digit long" });
     } //validation ended here
 
     //after clearing all the validation document will be created
