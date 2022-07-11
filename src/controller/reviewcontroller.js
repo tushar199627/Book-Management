@@ -5,6 +5,7 @@ const {
   isValidRequestBody,
   validRating,
   isValid,
+  validName,
 } = require("../validator/validate");
 
 //review
@@ -115,12 +116,10 @@ const updateReview = async function (req, res) {
 
     if (isValidRequestBody(data)) {
       //validating is there any data inside request body
-      return res
-        .status(400)
-        .send({
-          status: false,
-          msg: "Please provide the Details in the Request Body",
-        });
+      return res.status(400).send({
+        status: false,
+        msg: "Please provide the Details in the Request Body",
+      });
     }
     if (!isValidObjectId(bookId)) {
       // validating bookId is a valid object Id or not
@@ -168,27 +167,39 @@ const updateReview = async function (req, res) {
     let { review, rating, reviewedBy } = data; //Destructuring data coming from request body
 
     // validation starts
+    if (review) {
+      if (!isValid(review)) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "Please provide valid Review" });
+      }
+    }
+    if (rating) {
+      if (!isValid(rating)) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "Please Provide a valid Rating" });
+      }
+    }
+    if (rating) {
+      if (!validRating(rating)) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "Rating must be between 1 to 5" });
+      }
+    }
+    if (reviewedBy) {
+      if (!validName.test(reviewedBy)) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "reviewer name cannot be a number" });
+      }
 
-    if (!isValid(review)) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "Review field is required" });
-    }
-
-    if (!isValid(rating)) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "Rating field is required" });
-    }
-    if (!validRating(rating)) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "Rating must be between 1 to 5" });
-    }
-    if (!isValid(reviewedBy)) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "ReviewedBy field is required" });
+      if (!isValid(reviewedBy)) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "Please provide a valid reviewer name" });
+      }
     } // validation ends
 
     //find the review we want to update and update the review

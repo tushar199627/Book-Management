@@ -10,7 +10,7 @@ let isValidRequestBody = function (requestBody) {
   return Object.keys(requestBody).length === 0;
 };
 
-let validEmail = /^[a-z0-9]{1,}@g(oogle)?mail\.com$/;
+let validEmail = /^([a-zA-Z0-9\._]+)@([a-zA-Z0-9])+.([a-z]+)(.[a-z]+)?$/;
 
 let validPassword = function (value) {
   if (value.length >= 8 && value.length <= 15) return true;
