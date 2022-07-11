@@ -7,14 +7,16 @@ const {
   isValid,
   isValidRequestBody,
   isValidObjectId,
-  validISBN,
+  validISBN, 
+  releasedDate, 
+  validExcerpt
 } = require("../validator/validate");
 
 // create book
 const createBook = async function (req, res) {
   try {
     let requestBody = req.body; //getting data from request body
-    let { title, excerpt, userId, ISBN, category, subcategory } = requestBody; //Destructuring data coming from request body
+    let { title, excerpt, userId, ISBN, category, subcategory , releasedAt} = requestBody; //Destructuring data coming from request body
 
     if (isValidRequestBody(requestBody)) {
       //validating is there any data inside request body
@@ -35,6 +37,13 @@ const createBook = async function (req, res) {
       return res.status(400).send({
         status: false,
         msg: "Please provide a excerpt or a Valid excerpt",
+      });
+    }
+
+    if(!validExcerpt.test(excerpt)){
+      return res.status(400).send({
+        status: false,
+        msg: "Please provide a  Valid excerpt",
       });
     }
     if (isValidRequestBody(userId)) {
@@ -102,6 +111,12 @@ const createBook = async function (req, res) {
           .status(400)
           .send({ status: false, msg: "SubCatagogy cannot be empty" });
       }
+    }
+    if(!releasedDate.test(releasedAt)){
+      return res
+          .status(400)
+          .send({ status: false, msg: "Released Date should be in YYYY-MM-DD format" });
+      
     }
 
     //checking weather the title is already present in the database or not
@@ -280,11 +295,19 @@ const updateBook = async function (req, res) {
         .status(400)
         .send({ status: false, msg: "Excerpt is required" });
     }
+
     if (!isValid(releasedAt)) {
       return res
         .status(400)
         .send({ status: false, msg: "Release Date is required" });
     }
+    if(!releasedDate.test(releasedAt)){
+      return res
+          .status(400)
+          .send({ status: false, msg: "Released Date should be in YYYY-MM-DD format" });
+      
+    }
+    
     if (!isValid(ISBN)) {
       return res.status(400).send({ status: false, msg: "ISBN is required" });
     }
