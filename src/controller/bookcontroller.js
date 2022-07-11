@@ -7,7 +7,9 @@ const {
   isValid,
   isValidRequestBody,
   isValidObjectId,
-  validISBN, releasedDate
+  validISBN, 
+  releasedDate, 
+  validExcerpt
 } = require("../validator/validate");
 
 // create book
@@ -35,6 +37,13 @@ const createBook = async function (req, res) {
       return res.status(400).send({
         status: false,
         msg: "Please provide a excerpt or a Valid excerpt",
+      });
+    }
+
+    if(!validExcerpt.test(excerpt)){
+      return res.status(400).send({
+        status: false,
+        msg: "Please provide a  Valid excerpt",
       });
     }
     if (isValidRequestBody(userId)) {
@@ -286,6 +295,7 @@ const updateBook = async function (req, res) {
         .status(400)
         .send({ status: false, msg: "Excerpt is required" });
     }
+
     if (!isValid(releasedAt)) {
       return res
         .status(400)

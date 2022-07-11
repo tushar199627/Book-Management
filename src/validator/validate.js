@@ -10,12 +10,12 @@ let isValidRequestBody = function (requestBody) {
   return Object.keys(requestBody).length === 0;
 };
 
-let validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+let validEmail = /^[a-z0-9]{1,}@g(oogle)?mail\.com$/;
 
 let validPassword = function (value) {
   if (value.length >= 8 && value.length <= 15) return true;
 };
-
+let validExcerpt=/[a-zA-Z][a-zA-Z ]+[a-zA-Z]$/;
 let validRating = function (value) {
   if (value >= 1 && value <= 5) return true;
 };
@@ -49,5 +49,6 @@ module.exports = {
   validPincode,
   validName,
   validPhone,
-  releasedDate
+  releasedDate,
+  validExcerpt
 };

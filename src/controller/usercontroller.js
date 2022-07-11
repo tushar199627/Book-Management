@@ -45,7 +45,7 @@ let createUser = async function (req, res) {
         .send({ status: false, msg: "Please provide a Name or a Valid Name" });
     }
 
-    if (!validName.test(name.trim())) {
+    if (!validName.test(name)) {
       return res
         .status(400)
         .send({ status: false, msg: "Name cannot be a number" });
@@ -60,7 +60,7 @@ let createUser = async function (req, res) {
         });
     }
 
-    if (!validPhone.test(phone.trim())) {
+    if (!validPhone.test(phone)) {
       return res
         .status(400)
         .send({
@@ -89,7 +89,7 @@ let createUser = async function (req, res) {
         });
     }
 
-    if (!validEmail.test(email.trim())) {
+    if (!validEmail.test(email)) {
       return res
         .status(400)
         .send({ status: false, msg: `${email} is not valid email Id` });
