@@ -9,7 +9,7 @@ const {
   isValidObjectId,
   validISBN,
   releasedDate,
-  validExcerpt,
+  validExcerpt
 } = require("../validator/validate");
 
 //================================================CREATE BOOK===========================================================================//
@@ -113,6 +113,9 @@ const createBook = async function (req, res) {
           .send({ status: false, msg: "SubCatagogy cannot be empty" });
       }
     }
+    if(!isValid(releasedAt)){
+      return res.status(400).send({status:false, message:"please provide releaseAt or valid releasedAt"})
+    }
     if (!releasedDate.test(releasedAt)) {
       return res.status(400).send({
         status: false,
@@ -133,7 +136,7 @@ const createBook = async function (req, res) {
       return res.status(400).send({ status: false, msg: "ISBN already exist" });
     } //validation ended here
 
-    requestBody.releasedAt = new Date().getTime();
+    
 
     //after clearing all the validation document will be created
     let createBook = await bookmodel.create(requestBody);
