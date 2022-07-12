@@ -8,7 +8,7 @@ const {
   validName,
 } = require("../validator/validate");
 
-//review
+//================================================REVIEW BOOK===========================================================================//
 
 const reviewBook = async function (req, res) {
   try {
@@ -64,11 +64,6 @@ const reviewBook = async function (req, res) {
         .status(400)
         .send({ status: false, msg: "Rating must be between 1 to 5" });
     }
-    if (!isValid(reviewedBy)) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "Reviewer Name is required" });
-    }
 
     //the data that we want to show in the response body , i stored in a variable in a  Object form
     let reviewData = {
@@ -80,7 +75,7 @@ const reviewBook = async function (req, res) {
     };
 
     //then i have created the review
-    let savedData = await reviewmodel.create(reviewData);
+    let bookReview = await reviewmodel.create(reviewData);
 
     await bookmodel.findOneAndUpdate(
       { _id: bookId, isDeleted: false },
@@ -89,12 +84,27 @@ const reviewBook = async function (req, res) {
 
     //the data that we want to show in the response body , i stored in a variable in a  Object form
     let reviewDetails = {
-      _id: `ObjectId(${savedData._id})`,
-      bookId: `ObjectId(${savedData.bookId})`,
-      reviewedBy: savedData.reviewedBy,
-      reviewedAt: savedData.reviewedAt,
-      rating: savedData.rating,
-      review: savedData.review,
+      Book: {
+        _id: `ObjectId(${bookDetail._id})`,
+        title: bookDetail.title,
+        excerpt: bookDetail.excerpt,
+        userId: `ObjectId(${bookDetail.userId})`,
+        category: bookDetail.category,
+        subcategory: bookDetail.subcategory,
+        isDeleted: bookDetail.isDeleted,
+        review: bookDetail.reviews,
+        releasedAt: bookDetail.releasedAt,
+        createdAt: bookDetail.createdAt,
+        updatedAt: bookDetail.updatedAt
+      },
+      bookReview: {
+        _id: `ObjectId(${bookReview._id})`,
+        bookId: `ObjectId(${bookReview.bookId})`,
+        reviewedBy: bookReview.reviewedBy,
+        reviewedAt: bookReview.reviewedAt,
+        rating: bookReview.rating,
+        review: bookReview.review
+      },
     };
 
     return res.status(201).send({
@@ -107,7 +117,7 @@ const reviewBook = async function (req, res) {
   }
 };
 
-//update review
+//================================================UPDATE REVIEW===========================================================================//
 const updateReview = async function (req, res) {
   try {
     let bookId = req.params.bookId; //writing the bookId in the params we want to fetch detail about
@@ -203,28 +213,48 @@ const updateReview = async function (req, res) {
     } // validation ends
 
     //find the review we want to update and update the review
-    let updateReview = await reviewmodel.findOneAndUpdate(
-      { _id: reviewId, bookId: bookId },
-      {
-        $set: {
-          review: data.review,
-          rating: data.rating,
-          reviewedBy: data.reviewedBy,
+    let updateReview = await reviewmodel
+      .findOneAndUpdate(
+        { _id: reviewId, bookId: bookId },
+        {
+          $set: {
+            review: data.review,
+            rating: data.rating,
+            reviewedBy: data.reviewedBy,
+          },
         },
+        { new: true }
+      )
+      .select({ isDeleted: 0, createdAt: 0, updatedAt: 0, __v: 0 });
+
+    let newData = {
+      Book: {
+        _id: `ObjectId(${findBook._id})`,
+        title: findBook.title,
+        excerpt: findBook.excerpt,
+        userId: `ObjectId(${findBook.userId})`,
+        category: findBook.category,
+        subcategory: findBook.subcategory,
+        isDeleted: findBook.isDeleted,
+        review: findBook.reviews,
+        releasedAt: findBook.releasedAt,
+        createdAt: findBook.createdAt,
+        updatedAt: findBook.updatedAt,
       },
-      { new: true }
-    );
+      reviewData: updateReview,
+    };
+
     return res.status(200).send({
       status: true,
       message: "Review updated successfully",
-      data: updateReview,
+      data: newData,
     });
   } catch (error) {
     res.status(500).send({ status: false, Error: error.message });
   }
 };
 
-//delete review
+//================================================DELETE REVIEW===========================================================================//
 const deleteReview = async function (req, res) {
   try {
     let bookId = req.params.bookId; //writing the bookId in the params we want to fetch detail about

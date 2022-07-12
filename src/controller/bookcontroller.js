@@ -12,7 +12,7 @@ const {
   validExcerpt,
 } = require("../validator/validate");
 
-// create book
+//================================================CREATE BOOK===========================================================================//
 const createBook = async function (req, res) {
   try {
     let requestBody = req.body; //getting data from request body
@@ -114,12 +114,10 @@ const createBook = async function (req, res) {
       }
     }
     if (!releasedDate.test(releasedAt)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          msg: "Released Date should be in YYYY-MM-DD format",
-        });
+      return res.status(400).send({
+        status: false,
+        msg: "Released Date should be in YYYY-MM-DD format",
+      });
     }
 
     //checking weather the title is already present in the database or not
@@ -149,7 +147,7 @@ const createBook = async function (req, res) {
   }
 };
 
-//get Book
+//================================================GET BOOK===========================================================================//
 const bookList = async function (req, res) {
   try {
     let query = req.query; //getting data from request body
@@ -243,7 +241,7 @@ const getBookById = async function (req, res) {
   }
 };
 
-//update book
+//================================================UPDATE BOOK===========================================================================//
 const updateBook = async function (req, res) {
   try {
     let bookId = req.params.bookId; //writing the bookId in the params we want to fetch detail about
@@ -322,12 +320,10 @@ const updateBook = async function (req, res) {
           .send({ status: false, msg: "Provide a valid released Date" });
       }
       if (!releasedDate.test(releasedAt)) {
-        return res
-          .status(400)
-          .send({
-            status: false,
-            msg: "Released Date should be in YYYY-MM-DD format",
-          });
+        return res.status(400).send({
+          status: false,
+          msg: "Released Date should be in YYYY-MM-DD format",
+        });
       }
     }
 
@@ -371,7 +367,7 @@ const updateBook = async function (req, res) {
   }
 };
 
-//delete book
+//================================================DELETE BOOK===========================================================================//
 const deleteBook = async function (req, res) {
   try {
     let bookId = req.params.bookId; //writing the bookId in the params we want to fetch detail about
@@ -414,7 +410,6 @@ const deleteBook = async function (req, res) {
     return res.status(200).send({
       status: true,
       msg: "Book Deleted Successfully",
-      data: deletedBook,
     });
   } catch (error) {
     res.status(500).send({ status: false, Error: error.message });
