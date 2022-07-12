@@ -96,7 +96,6 @@ const reviewBook = async function (req, res) {
 
     //the data that we want to show in the response body , i stored in a variable in a  Object form
     let reviewDetails = {
-      Book: {
         _id: `ObjectId(${bookDetail._id})`,
         title: bookDetail.title,
         excerpt: bookDetail.excerpt,
@@ -108,8 +107,7 @@ const reviewBook = async function (req, res) {
         releasedAt: bookDetail.releasedAt,
         createdAt: bookDetail.createdAt,
         updatedAt: bookDetail.updatedAt,
-      },
-      bookReview: {
+      reviewsData: {
         _id: `ObjectId(${bookReview._id})`,
         bookId: `ObjectId(${bookReview.bookId})`,
         reviewedBy: bookReview.reviewedBy,
@@ -256,7 +254,6 @@ const updateReview = async function (req, res) {
       .select({ isDeleted: 0, createdAt: 0, updatedAt: 0, __v: 0 });
 
     let newData = {
-      Book: {
         _id: `ObjectId(${findBook._id})`,
         title: findBook.title,
         excerpt: findBook.excerpt,
@@ -268,8 +265,7 @@ const updateReview = async function (req, res) {
         releasedAt: findBook.releasedAt,
         createdAt: findBook.createdAt,
         updatedAt: findBook.updatedAt,
-      },
-      reviewData: updateReview,
+        reviewsData: updateReview,
     };
 
     return res.status(200).send({

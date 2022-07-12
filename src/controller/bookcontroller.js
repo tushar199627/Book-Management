@@ -241,7 +241,7 @@ const getBookById = async function (req, res) {
       releasedAt: findBook.releasedAt,
       createdAt: findBook.createdAt,
       updatedAt: findBook.updatedAt,
-      reviewData: findReview,
+      reviewsData: findReview,
     };
     return res
       .status(200)
