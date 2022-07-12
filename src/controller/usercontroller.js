@@ -1,14 +1,6 @@
 const jwt = require("jsonwebtoken");
 const usermodel = require("../model/usermodel");
-const {
-  isValid,
-  isValidRequestBody,
-  validPassword,
-  validCity,
-  validPincode,
-  validName,
-  validPhone,
-  validEmail,
+const {isValid, isValidRequestBody, validPassword, validCity, validPincode, validName, validPhone, validEmail,
 } = require("../validator/validate");
 
 //================================================CREATE USER===========================================================================//
@@ -27,10 +19,16 @@ let createUser = async function (req, res) {
 
     //here performing validation for data
     if (!isValid(title)) {
+<<<<<<< HEAD
+      return res
+        .status(400)
+        .send({status: false, msg: "Please provide a Title or a Valid title", });
+=======
       return res.status(400).send({
         status: false,
         msg: "Please provide a Title or a Valid title",
       });
+>>>>>>> cfd98f73f30dc0381fc7e2acdf37e9b918f4db2a
     }
     if (title != "Mr" && title != "Miss" && title != "Mrs") {
       return res
