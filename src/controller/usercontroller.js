@@ -110,45 +110,46 @@ let createUser = async function (req, res) {
           "Password Should be Minimum 8 Character and Maximum 15 Character Long",
       });
     }
+    if (address) {
+      if (typeof address != "object") {
+        return res.status(400).send({
+          status: false,
+          message: "Please provide a address And address should be an object",
+        });
+      }
 
-    if (typeof address != "object") {
-      return res.status(400).send({
-        status: false,
-        message: "Please provide a address And address should be an object",
-      });
-    }
+      if (!isValid(address.street)) {
+        return res
+          .status(400)
+          .send({ status: false, message: "Street should be Present" });
+      }
 
-    if (!isValid(address.street)) {
-      return res
-        .status(400)
-        .send({ status: false, message: "Street should be Present" });
-    }
+      if (!isValid(address.city)) {
+        return res.status(400).send({
+          status: false,
+          message: "City should be Present or City should be Valid",
+        });
+      }
 
-    if (!isValid(address.city)) {
-      return res.status(400).send({
-        status: false,
-        message: "City should be Present or City should be Valid",
-      });
-    }
+      if (!validCity.test(address.city)) {
+        return res
+          .status(400)
+          .send({ status: false, message: "City cannot be Number" });
+      }
 
-    if (!validCity.test(address.city)) {
-      return res
-        .status(400)
-        .send({ status: false, message: "City cannot be Number" });
-    }
+      if (!isValid(address.pincode)) {
+        return res
+          .status(400)
+          .send({ status: false, message: "Pincode should be Present" });
+      }
 
-    if (!isValid(address.pincode)) {
-      return res
-        .status(400)
-        .send({ status: false, message: "Pincode should be Present" });
-    }
-
-    if (!validPincode.test(address.pincode)) {
-      return res.status(400).send({
-        status: false,
-        message:
-          "Please enter a valid Pincode, it should not be alpabetic and should be 6 digit long",
-      });
+      if (!validPincode.test(address.pincode)) {
+        return res.status(400).send({
+          status: false,
+          message:
+            "Please enter a valid Pincode, it should not be alpabetic and should be 6 digit long",
+        });
+      }
     } //validation ended here
 
     //after clearing all the validation document will be created

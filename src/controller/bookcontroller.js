@@ -46,6 +46,11 @@ const createBook = async function (req, res) {
         message: "Please provide a  Valid excerpt",
       });
     }
+    if (!userId) {
+      return res
+        .status(400)
+        .send({ status: false, message: "User Id is required" });
+    }
     if (isValidRequestBody(userId)) {
       return res
         .status(400)
@@ -56,6 +61,12 @@ const createBook = async function (req, res) {
       return res
         .status(400)
         .send({ status: false, message: `${userId} is not a valid user id` });
+    }
+    let checkids = await usermodel.findById({ _id: userId });
+    if (!checkids) {
+      return res
+        .status(400)
+        .send({ status: false, message: "UserId is not valid" });
     }
 
     //checking wheather the user is present inside database or not
@@ -71,9 +82,10 @@ const createBook = async function (req, res) {
     if (!checkid) {
       return res.status(400).send({
         status: false,
-        message: "user dosenot exis with this user id",
+        message: "user dosenot exist with this user id",
       });
     }
+
     if (!isValid(ISBN)) {
       return res
         .status(400)
@@ -114,12 +126,10 @@ const createBook = async function (req, res) {
       }
     }
     if (!isValid(releasedAt)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          message: "please provide releaseAt or valid releasedAt",
-        });
+      return res.status(400).send({
+        status: false,
+        message: "please provide releaseAt or valid releasedAt",
+      });
     }
     if (!releasedDate.test(releasedAt)) {
       return res.status(400).send({
@@ -269,6 +279,12 @@ const updateBook = async function (req, res) {
         .status(400)
         .send({ status: false, message: "Please provide a valid Book Id" });
     }
+    let findBooks = await bookmodel.findById({ _id: bookId });
+    if (!findBooks) {
+      return res
+        .status(403)
+        .send({ status: false, message: "Book Id is not Valid" });
+    }
 
     //finding the book we want to update from the bookmodel
     let findBook = await bookmodel.findById({ _id: bookId });
@@ -286,6 +302,11 @@ const updateBook = async function (req, res) {
       return res
         .status(403)
         .send({ status: false, message: "You are not Authorized" });
+    }
+    if (!findBook) {
+      return res
+        .status(403)
+        .send({ status: false, message: "Book Id is not Valid" });
     }
 
     let requestBody = req.body; //getting data in request body
@@ -395,6 +416,12 @@ const deleteBook = async function (req, res) {
       return res
         .status(400)
         .send({ status: false, message: "Please provide a valid Book Id" });
+    }
+    let findBooks = await bookmodel.findById({ _id: bookId });
+    if (!findBooks) {
+      return res
+        .status(400)
+        .send({ status: false, message: "Book Id is not Valid" });
     }
 
     //finding the book we want to update from the bookmode

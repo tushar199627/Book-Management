@@ -31,6 +31,7 @@ let validExcerpt = /[a-zA-Z][a-zA-Z ]+[a-zA-Z]$/;
 let validString = /^[ a-z ]+$/i;
 let validEmail = /^([a-zA-Z0-9\._]+)@([a-zA-Z0-9])+.([a-z]+)(.[a-z]+)?$/;
 let releasedDate = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
+let reviewedDate = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
 let validISBN = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
 
 
@@ -49,5 +50,6 @@ module.exports = {
   validName,
   validPhone,
   releasedDate,
-  validExcerpt
+  validExcerpt,
+  reviewedDate
 };

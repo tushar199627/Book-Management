@@ -6,6 +6,7 @@ const {
   validRating,
   isValid,
   validName,
+  reviewedDate,
 } = require("../validator/validate");
 
 //================================================REVIEW BOOK===========================================================================//
@@ -49,7 +50,7 @@ const reviewBook = async function (req, res) {
 
     let requestBody = req.body; //getting data from request body
 
-    let { review, rating, reviewedBy } = requestBody; //Destructuring data coming from request body
+    let { review, rating, reviewedBy, reviewedAt } = requestBody; //Destructuring data coming from request body
 
     if (isValidRequestBody(requestBody)) {
       //validating is there any data inside request body
@@ -75,6 +76,17 @@ const reviewBook = async function (req, res) {
         .status(400)
         .send({ status: false, message: "Rating must be between 1 to 5" });
     }
+    if (!isValid(reviewedAt)) {
+      return res
+        .status(400)
+        .send({ status: false, message: "ReviewAt is required" });
+    }
+    if (!reviewedDate.test(reviewedAt)) {
+      return res.status(400).send({
+        status: false,
+        message: "Reviewed Date should be in YYYY-MM-DD format",
+      });
+    }
 
     //the data that we want to show in the response body , i stored in a variable in a  Object form
     let reviewData = {
@@ -96,17 +108,17 @@ const reviewBook = async function (req, res) {
 
     //the data that we want to show in the response body , i stored in a variable in a  Object form
     let reviewDetails = {
-        _id: `ObjectId(${bookDetail._id})`,
-        title: bookDetail.title,
-        excerpt: bookDetail.excerpt,
-        userId: `ObjectId(${bookDetail.userId})`,
-        category: bookDetail.category,
-        subcategory: bookDetail.subcategory,
-        isDeleted: bookDetail.isDeleted,
-        review: updatedBook.reviews,
-        releasedAt: bookDetail.releasedAt,
-        createdAt: bookDetail.createdAt,
-        updatedAt: bookDetail.updatedAt,
+      _id: `ObjectId(${bookDetail._id})`,
+      title: bookDetail.title,
+      excerpt: bookDetail.excerpt,
+      userId: `ObjectId(${bookDetail.userId})`,
+      category: bookDetail.category,
+      subcategory: bookDetail.subcategory,
+      isDeleted: bookDetail.isDeleted,
+      review: updatedBook.reviews,
+      releasedAt: bookDetail.releasedAt,
+      createdAt: bookDetail.createdAt,
+      updatedAt: bookDetail.updatedAt,
       reviewsData: {
         _id: bookReview._id,
         bookId: `ObjectId(${bookReview.bookId})`,
@@ -254,18 +266,18 @@ const updateReview = async function (req, res) {
       .select({ isDeleted: 0, createdAt: 0, updatedAt: 0, __v: 0 });
 
     let newData = {
-        _id: `ObjectId(${findBook._id})`,
-        title: findBook.title,
-        excerpt: findBook.excerpt,
-        userId: `ObjectId(${findBook.userId})`,
-        category: findBook.category,
-        subcategory: findBook.subcategory,
-        isDeleted: findBook.isDeleted,
-        review: findBook.reviews,
-        releasedAt: findBook.releasedAt,
-        createdAt: findBook.createdAt,
-        updatedAt: findBook.updatedAt,
-        reviewsData: updateReview,
+      _id: `ObjectId(${findBook._id})`,
+      title: findBook.title,
+      excerpt: findBook.excerpt,
+      userId: `ObjectId(${findBook.userId})`,
+      category: findBook.category,
+      subcategory: findBook.subcategory,
+      isDeleted: findBook.isDeleted,
+      review: findBook.reviews,
+      releasedAt: findBook.releasedAt,
+      createdAt: findBook.createdAt,
+      updatedAt: findBook.updatedAt,
+      reviewsData: updateReview,
     };
 
     return res.status(200).send({
