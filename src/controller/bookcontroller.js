@@ -425,8 +425,4 @@ module.exports = { createBook, bookList, getBookById, updateBook, deleteBook };
 
 
 
-const { isValidObjectId } = require("mongoose");
-const bookmodel = require("../model/bookmodel");
-
-const { isValid, isValidObjectId } = require("../validator/validate");
 
