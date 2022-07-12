@@ -23,7 +23,7 @@ const checkAuth = function (req, res, next) {
         if (Date.now() > decodedToken.exp * 1000) {
           return res
             .status(401)
-            .send({ status: false, message: "Token expired" });
+            .send({ status: false, message: "Token expired" }); //checking if the token is expired
         }
         req.userId = decodedToken.userId;
 
