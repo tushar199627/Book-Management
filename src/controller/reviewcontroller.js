@@ -26,6 +26,13 @@ const reviewBook = async function (req, res) {
         .status(400)
         .send({ status: false, message: "Please Provide a valid book Id" });
     }
+    let findBook = await bookmodel.findById({ _id: bookId });
+
+    if (!findBook) {
+      return res
+        .status(404)
+        .send({ status: false, message: "Book Id not found" });
+    }
 
     //finding the book from the bookmodel
     let bookDetail = await bookmodel.findById({
@@ -81,9 +88,10 @@ const reviewBook = async function (req, res) {
     //then i have created the review
     let bookReview = await reviewmodel.create(reviewData);
 
-    await bookmodel.findOneAndUpdate(
+    let updatedBook = await bookmodel.findOneAndUpdate(
       { _id: bookId, isDeleted: false },
-      { $inc: { reviews: 1 } }
+      { $inc: { reviews: 1 } },
+      { new: true }
     );
 
     //the data that we want to show in the response body , i stored in a variable in a  Object form
@@ -96,7 +104,7 @@ const reviewBook = async function (req, res) {
         category: bookDetail.category,
         subcategory: bookDetail.subcategory,
         isDeleted: bookDetail.isDeleted,
-        review: bookDetail.reviews,
+        review: updatedBook.reviews,
         releasedAt: bookDetail.releasedAt,
         createdAt: bookDetail.createdAt,
         updatedAt: bookDetail.updatedAt,
@@ -113,7 +121,7 @@ const reviewBook = async function (req, res) {
 
     return res.status(201).send({
       status: true,
-      msg: "Review Created Successfully",
+      message: "Review Created Successfully",
       data: reviewDetails,
     });
   } catch (error) {
@@ -141,6 +149,13 @@ const updateReview = async function (req, res) {
         .status(400)
         .send({ status: false, message: "Please Provide a valid book Id" });
     }
+    let findBooks = await bookmodel.findById({ _id: bookId });
+
+    if (!findBooks) {
+      return res
+        .status(404)
+        .send({ status: false, message: "Book Id not found" });
+    }
 
     //finding the book from the bookmodel
     const findBook = await bookmodel.findById({
@@ -157,6 +172,14 @@ const updateReview = async function (req, res) {
       return res
         .status(400)
         .send({ status: false, message: "Please Provide a Valid Review Id" });
+    }
+    let findReviews = await reviewmodel.findById({
+      _id: reviewId,
+    });
+    if (!findReviews) {
+      return res
+        .status(404)
+        .send({ status: false, message: "Review Id not found" });
     }
 
     //find the review we want to update
@@ -210,12 +233,10 @@ const updateReview = async function (req, res) {
       }
 
       if (!isValid(reviewedBy)) {
-        return res
-          .status(400)
-          .send({
-            status: false,
-            message: "Please provide a valid reviewer name",
-          });
+        return res.status(400).send({
+          status: false,
+          message: "Please provide a valid reviewer name",
+        });
       }
     } // validation ends
 
@@ -278,6 +299,13 @@ const deleteReview = async function (req, res) {
         .status(400)
         .send({ status: false, message: "Please provide a valid Book Id" });
     }
+    let findBooks = await bookmodel.findById({ _id: bookId });
+
+    if (!findBooks) {
+      return res
+        .status(404)
+        .send({ status: false, message: "Book Id not found" });
+    }
 
     let reviewId = req.params.reviewId; //writing the review Id in the params we want to fetch detail about
 
@@ -292,6 +320,14 @@ const deleteReview = async function (req, res) {
         .send({ status: false, message: "Please provide a valid review Id" });
     }
 
+    let findReviews = await reviewmodel.findById({
+      _id: reviewId,
+    });
+    if (!findReviews) {
+      return res
+        .status(404)
+        .send({ status: false, message: "Review Id not found" });
+    }
     //find the id of the review which have isDeleted as False
     let findreview = await reviewmodel.findOne({
       _id: reviewId,

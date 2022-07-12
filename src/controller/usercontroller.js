@@ -27,12 +27,10 @@ let createUser = async function (req, res) {
 
     //here performing validation for data
     if (!isValid(title)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          message: "Please provide a Title or a Valid title",
-        });
+      return res.status(400).send({
+        status: false,
+        message: "Please provide a Title or a Valid title",
+      });
     }
     if (title != "Mr" && title != "Miss" && title != "Mrs") {
       return res
@@ -41,12 +39,10 @@ let createUser = async function (req, res) {
     }
 
     if (!isValid(name)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          message: "Please provide a Name or a Valid Name",
-        });
+      return res.status(400).send({
+        status: false,
+        message: "Please provide a Name or a Valid Name",
+      });
     }
 
     if (!validName.test(name)) {
@@ -94,12 +90,10 @@ let createUser = async function (req, res) {
     //checking is there same Email Id present inside database or not
     let isAllreadyExistEmail = await usermodel.findOne({ email: email });
     if (isAllreadyExistEmail) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          message: `this email id -${email} already exist`,
-        });
+      return res.status(400).send({
+        status: false,
+        message: `this email id -${email} already exist`,
+      });
     }
 
     if (!isValid(password)) {
@@ -235,13 +229,11 @@ let userLogin = async function (req, res) {
     res.setHeader("x-api-key", token);
 
     //after token created successfully then token will be provided in the response body
-    return res
-      .status(200)
-      .send({
-        status: true,
-        token: token,
-        message: "User Logged in Successfully",
-      }); //sending data in response
+    return res.status(200).send({
+      status: true,
+      data: token,
+      message: "User Logged in Successfully",
+    }); //sending data in response
   } catch (error) {
     res.status(500).send({ status: false, error: error.message });
   }

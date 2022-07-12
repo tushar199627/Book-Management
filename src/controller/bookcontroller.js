@@ -1,7 +1,6 @@
 const bookmodel = require("../model/bookmodel");
 const usermodel = require("../model/usermodel");
 const reviewmodel = require("../model/reviewmodel");
-const jwt = require("jsonwebtoken");
 
 const {
   isValid,
@@ -9,7 +8,7 @@ const {
   isValidObjectId,
   validISBN,
   releasedDate,
-  validExcerpt
+  validExcerpt,
 } = require("../validator/validate");
 
 //================================================CREATE BOOK===========================================================================//
@@ -70,12 +69,10 @@ const createBook = async function (req, res) {
 
     //here performing validation for data
     if (!checkid) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          message: "user dosenot exis with this user id",
-        });
+      return res.status(400).send({
+        status: false,
+        message: "user dosenot exis with this user id",
+      });
     }
     if (!isValid(ISBN)) {
       return res
@@ -116,8 +113,13 @@ const createBook = async function (req, res) {
           .send({ status: false, message: "SubCatagogy cannot be empty" });
       }
     }
-    if(!isValid(releasedAt)){
-      return res.status(400).send({status:false, message:"please provide releaseAt or valid releasedAt"})
+    if (!isValid(releasedAt)) {
+      return res
+        .status(400)
+        .send({
+          status: false,
+          message: "please provide releaseAt or valid releasedAt",
+        });
     }
     if (!releasedDate.test(releasedAt)) {
       return res.status(400).send({
@@ -140,8 +142,6 @@ const createBook = async function (req, res) {
         .status(400)
         .send({ status: false, message: "ISBN already exist" });
     } //validation ended here
-
-    
 
     //after clearing all the validation document will be created
     let createBook = await bookmodel.create(requestBody);
@@ -245,7 +245,7 @@ const getBookById = async function (req, res) {
     };
     return res
       .status(200)
-      .send({ status: true, msg: "Book list", data: bookDetails });
+      .send({ status: true, message: "Books list", data: bookDetails });
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message });
   }
@@ -301,12 +301,10 @@ const updateBook = async function (req, res) {
       //checking wheather the title of the book is present in the database ot what
       let isAllreadyExistTitle = await bookmodel.findOne({ title: title });
       if (isAllreadyExistTitle) {
-        return res
-          .status(400)
-          .send({
-            status: false,
-            message: `${title} - title is allready exist`,
-          });
+        return res.status(400).send({
+          status: false,
+          message: `${title} - title is allready exist`,
+        });
       }
     }
     //validation
@@ -430,12 +428,3 @@ const deleteBook = async function (req, res) {
 };
 
 module.exports = { createBook, bookList, getBookById, updateBook, deleteBook };
-
-
-
-
-
-
-
-
-
