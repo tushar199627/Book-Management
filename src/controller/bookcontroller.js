@@ -7,16 +7,17 @@ const {
   isValid,
   isValidRequestBody,
   isValidObjectId,
-  validISBN, 
-  releasedDate, 
-  validExcerpt
+  validISBN,
+  releasedDate,
+  validExcerpt,
 } = require("../validator/validate");
 
-// create book
+//================================================CREATE BOOK===========================================================================//
 const createBook = async function (req, res) {
   try {
     let requestBody = req.body; //getting data from request body
-    let { title, excerpt, userId, ISBN, category, subcategory , releasedAt} = requestBody; //Destructuring data coming from request body
+    let { title, excerpt, userId, ISBN, category, subcategory, releasedAt } =
+      requestBody; //Destructuring data coming from request body
 
     if (isValidRequestBody(requestBody)) {
       //validating is there any data inside request body
@@ -40,7 +41,7 @@ const createBook = async function (req, res) {
       });
     }
 
-    if(!validExcerpt.test(excerpt)){
+    if (!validExcerpt.test(excerpt)) {
       return res.status(400).send({
         status: false,
         msg: "Please provide a  Valid excerpt",
@@ -112,11 +113,11 @@ const createBook = async function (req, res) {
           .send({ status: false, msg: "SubCatagogy cannot be empty" });
       }
     }
-    if(!releasedDate.test(releasedAt)){
-      return res
-          .status(400)
-          .send({ status: false, msg: "Released Date should be in YYYY-MM-DD format" });
-      
+    if (!releasedDate.test(releasedAt)) {
+      return res.status(400).send({
+        status: false,
+        msg: "Released Date should be in YYYY-MM-DD format",
+      });
     }
 
     //checking weather the title is already present in the database or not
@@ -146,7 +147,7 @@ const createBook = async function (req, res) {
   }
 };
 
-//get Book
+//================================================GET BOOK===========================================================================//
 const bookList = async function (req, res) {
   try {
     let query = req.query; //getting data from request body
@@ -205,7 +206,9 @@ const getBookById = async function (req, res) {
     //checking wheather the book is deleted or not if it is deleted it should returnthe below response
     let deleted = findBook.isDeleted;
     if (deleted == true) {
-      return res.status(400).send({ status: false, msg: "Book already deleted" });
+      return res
+        .status(400)
+        .send({ status: false, msg: "Book already deleted" });
     }
     //checking if the findbook is empty or what
     if (findBook.length == 0) {
@@ -238,7 +241,7 @@ const getBookById = async function (req, res) {
   }
 };
 
-//update book
+//================================================UPDATE BOOK===========================================================================//
 const updateBook = async function (req, res) {
   try {
     let bookId = req.params.bookId; //writing the bookId in the params we want to fetch detail about
@@ -279,45 +282,65 @@ const updateBook = async function (req, res) {
     let { title, excerpt, releasedAt, ISBN } = requestBody; //Destructuring data coming from request body
 
     //validation starts
-    if (!isValid(title)) {
-      return res.status(400).send({ status: false, msg: "Title is Required" });
-    }
-    //checking wheather the title of the book is present in the database ot what
-    let isAllreadyExistTitle = await bookmodel.findOne({ title: title });
-    if (isAllreadyExistTitle) {
-      return res
-        .status(400)
-        .send({ status: false, msg: `${title} is allready exist` });
+    if (title) {
+      if (!isValid(title)) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "Provide a Valid Title" });
+      }
+      //checking wheather the title of the book is present in the database ot what
+      let isAllreadyExistTitle = await bookmodel.findOne({ title: title });
+      if (isAllreadyExistTitle) {
+        return res
+          .status(400)
+          .send({ status: false, msg: `${title} - title is allready exist` });
+      }
     }
     //validation
-    if (!isValid(excerpt)) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "Excerpt is required" });
-    }
 
-    if (!isValid(releasedAt)) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "Release Date is required" });
-    }
-    if(!releasedDate.test(releasedAt)){
-      return res
+    if (excerpt) {
+      if (!isValid(excerpt)) {
+        return res
           .status(400)
-          .send({ status: false, msg: "Released Date should be in YYYY-MM-DD format" });
-      
-    }
-    
-    if (!isValid(ISBN)) {
-      return res.status(400).send({ status: false, msg: "ISBN is required" });
+          .send({ status: false, msg: "[Provide a valid excerpt]" });
+      }
+
+      if (!validExcerpt.test(excerpt)) {
+        return res.status(400).send({
+          status: false,
+          msg: "Please provide a  Valid excerpt",
+        });
+      }
     }
 
-    //checking wheather the ISBN is present in the database or what
-    let isAllreadyExistISBN = await bookmodel.findOne({ ISBN: ISBN });
-    if (isAllreadyExistISBN) {
-      return res
-        .status(400)
-        .send({ status: false, msg: `${ISBN} is already exist` });
+    if (releasedAt) {
+      if (!isValid(releasedAt)) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "Provide a valid released Date" });
+      }
+      if (!releasedDate.test(releasedAt)) {
+        return res.status(400).send({
+          status: false,
+          msg: "Released Date should be in YYYY-MM-DD format",
+        });
+      }
+    }
+
+    if (ISBN) {
+      if (!isValid(ISBN)) {
+        return res
+          .status(400)
+          .send({ status: false, msg: "Provide a valid ISBN" });
+      }
+
+      //checking wheather the ISBN is present in the database or what
+      let isAllreadyExistISBN = await bookmodel.findOne({ ISBN: ISBN });
+      if (isAllreadyExistISBN) {
+        return res
+          .status(400)
+          .send({ status: false, msg: `${ISBN} - ISBN is already exist` });
+      }
     } //  validation ends
 
     //find the book from the bookmodel and updating it
@@ -344,7 +367,7 @@ const updateBook = async function (req, res) {
   }
 };
 
-//delete book
+//================================================DELETE BOOK===========================================================================//
 const deleteBook = async function (req, res) {
   try {
     let bookId = req.params.bookId; //writing the bookId in the params we want to fetch detail about
@@ -387,7 +410,6 @@ const deleteBook = async function (req, res) {
     return res.status(200).send({
       status: true,
       msg: "Book Deleted Successfully",
-      data: deletedBook,
     });
   } catch (error) {
     res.status(500).send({ status: false, Error: error.message });
