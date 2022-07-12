@@ -108,7 +108,7 @@ const reviewBook = async function (req, res) {
         createdAt: bookDetail.createdAt,
         updatedAt: bookDetail.updatedAt,
       reviewsData: {
-        _id: `ObjectId(${bookReview._id})`,
+        _id: bookReview._id,
         bookId: `ObjectId(${bookReview.bookId})`,
         reviewedBy: bookReview.reviewedBy,
         reviewedAt: bookReview.reviewedAt,
