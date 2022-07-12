@@ -23,34 +23,34 @@ const createBook = async function (req, res) {
       //validating is there any data inside request body
       return res
         .status(400)
-        .send({ status: false, msg: "Please provide the Details" });
+        .send({ status: false, message: "Please provide the Details" });
     }
 
     //here performing validation for data
     if (!isValid(title)) {
       return res.status(400).send({
         status: false,
-        msg: "Please provide a Title or a Valid title",
+        message: "Please provide a Title or a Valid title",
       });
     }
 
     if (!isValid(excerpt)) {
       return res.status(400).send({
         status: false,
-        msg: "Please provide a excerpt or a Valid excerpt",
+        message: "Please provide a excerpt or a Valid excerpt",
       });
     }
 
     if (!validExcerpt.test(excerpt)) {
       return res.status(400).send({
         status: false,
-        msg: "Please provide a  Valid excerpt",
+        message: "Please provide a  Valid excerpt",
       });
     }
     if (isValidRequestBody(userId)) {
       return res
         .status(400)
-        .send({ status: false, msg: "please provide userId" });
+        .send({ status: false, message: "please provide userId" });
     }
 
     if (!isValidObjectId(userId)) {
@@ -65,14 +65,14 @@ const createBook = async function (req, res) {
     if (checkid._id != req.userId) {
       return res
         .status(403)
-        .send({ status: false, msg: "You are not Authorized" });
+        .send({ status: false, message: "You are not Authorized" });
     }
 
     //here performing validation for data
     if (!checkid) {
       return res
         .status(400)
-        .send({ status: false, msg: "user dosenot exis with this user id" });
+        .send({ status: false, message: "user dosenot exis with this user id" });
     }
     if (!isValid(ISBN)) {
       return res
@@ -89,14 +89,14 @@ const createBook = async function (req, res) {
     if (!isValid(category)) {
       return res.status(400).send({
         status: false,
-        msg: "Please provide a category or a Valid category",
+        message: "Please provide a category or a Valid category",
       });
     }
 
     if (!isValid(subcategory)) {
       return res.status(400).send({
         status: false,
-        msg: "Please provide a subcategory or a Valid subcategory",
+        message: "Please provide a subcategory or a Valid subcategory",
       });
     }
 
@@ -104,19 +104,19 @@ const createBook = async function (req, res) {
     if (!Array.isArray(subcategory)) {
       return res
         .status(400)
-        .send({ status: false, msg: "SubCatagogy Must be in Array" });
+        .send({ status: false, message: "SubCatagogy Must be in Array" });
     }
     if (Array.isArray(subcategory)) {
       if (subcategory.length == 0) {
         return res
           .status(400)
-          .send({ status: false, msg: "SubCatagogy cannot be empty" });
+          .send({ status: false, message: "SubCatagogy cannot be empty" });
       }
     }
     if (!releasedDate.test(releasedAt)) {
       return res.status(400).send({
         status: false,
-        msg: "Released Date should be in YYYY-MM-DD format",
+        message: "Released Date should be in YYYY-MM-DD format",
       });
     }
 
@@ -125,12 +125,12 @@ const createBook = async function (req, res) {
     if (titleCheck) {
       return res
         .status(400)
-        .send({ status: false, msg: "title already exist" });
+        .send({ status: false, message: "title already exist" });
     }
     //checking weather the ISBN is already present in the database or not
     let ISBNCheck = await bookmodel.findOne({ ISBN: ISBN });
     if (ISBNCheck) {
-      return res.status(400).send({ status: false, msg: "ISBN already exist" });
+      return res.status(400).send({ status: false, message: "ISBN already exist" });
     } //validation ended here
 
     requestBody.releasedAt = new Date().getTime();
@@ -139,11 +139,11 @@ const createBook = async function (req, res) {
     let createBook = await bookmodel.create(requestBody);
     return res.status(201).send({
       status: true,
-      msg: "Book sucessfully Created",
+      message: "Book sucessfully Created",
       data: createBook,
     });
   } catch (error) {
-    return res.status(500).send({ status: false, msg: error.message });
+    return res.status(500).send({ status: false, message: error.message });
   }
 };
 
@@ -194,13 +194,13 @@ const getBookById = async function (req, res) {
       // validating bookId is a valid object Id or not
       return res
         .status(400)
-        .send({ status: false, msg: "Please provide a valid Book Id" });
+        .send({ status: false, message: "Please provide a valid Book Id" });
     }
     //finding the book from the bookmodel
     let findBook = await bookmodel.findById({ _id: bookId });
 
     if (!findBook) {
-      return res.status(404).send({ status: false, msg: "Book Id not found" });
+      return res.status(404).send({ status: false, message: "Book Id not found" });
     }
 
     //checking wheather the book is deleted or not if it is deleted it should returnthe below response
@@ -208,11 +208,11 @@ const getBookById = async function (req, res) {
     if (deleted == true) {
       return res
         .status(400)
-        .send({ status: false, msg: "Book already deleted" });
+        .send({ status: false, message: "Book already deleted" });
     }
     //checking if the findbook is empty or what
     if (findBook.length == 0) {
-      return res.status(404).send({ status: false, msg: "Book not Found" });
+      return res.status(404).send({ status: false, message: "Book not Found" });
     }
 
     //finding the review for that particular book Id
@@ -237,7 +237,7 @@ const getBookById = async function (req, res) {
       .status(200)
       .send({ status: true, msg: "Book list", data: bookDetails });
   } catch (error) {
-    return res.status(500).send({ status: false, msg: error.message });
+    return res.status(500).send({ status: false, message: error.message });
   }
 };
 
@@ -250,32 +250,32 @@ const updateBook = async function (req, res) {
     if (!bookId) {
       return res
         .status(400)
-        .send({ status: false, msg: "Book Id is Required" });
+        .send({ status: false, message: "Book Id is Required" });
     }
 
     // validating bookId is a valid object Id or not
     if (!isValidObjectId(bookId)) {
       return res
         .status(400)
-        .send({ status: false, msg: "Please provide a valid Book Id" });
+        .send({ status: false, message: "Please provide a valid Book Id" });
     }
 
     //finding the book we want to update from the bookmodel
     let findBook = await bookmodel.findById({ _id: bookId });
     if (findBook.length == 0) {
-      return res.status(404).send({ status: false, msg: "Book not Found" });
+      return res.status(404).send({ status: false, message: "Book not Found" });
     }
 
     //checking wheather the book is deleted or what, if deleted it should return the below response
     let deleted = findBook.isDeleted;
     if (deleted == true) {
-      return res.status(404).send({ status: false, msg: "Book not Found" });
+      return res.status(404).send({ status: false, message: "Book not Found" });
     }
 
     if (findBook.userId != req.userId) {
       return res
         .status(403)
-        .send({ status: false, msg: "You are not Authorized" });
+        .send({ status: false, message: "You are not Authorized" });
     }
 
     let requestBody = req.body; //getting data in request body
@@ -286,14 +286,14 @@ const updateBook = async function (req, res) {
       if (!isValid(title)) {
         return res
           .status(400)
-          .send({ status: false, msg: "Provide a Valid Title" });
+          .send({ status: false, message: "Provide a Valid Title" });
       }
       //checking wheather the title of the book is present in the database ot what
       let isAllreadyExistTitle = await bookmodel.findOne({ title: title });
       if (isAllreadyExistTitle) {
         return res
           .status(400)
-          .send({ status: false, msg: `${title} - title is allready exist` });
+          .send({ status: false, message: `${title} - title is allready exist` });
       }
     }
     //validation
