@@ -17,14 +17,14 @@ const reviewBook = async function (req, res) {
     if (!bookId) {
       return res
         .status(400)
-        .send({ status: false, msg: "Book Id is required" });
+        .send({ status: false, message: "Book Id is required" });
     }
 
     if (!isValidObjectId(bookId)) {
       // validating bookId is a valid object Id or not
       return res
         .status(400)
-        .send({ status: false, msg: "Please Provide a valid book Id" });
+        .send({ status: false, message: "Please Provide a valid book Id" });
     }
 
     //finding the book from the bookmodel
@@ -48,21 +48,21 @@ const reviewBook = async function (req, res) {
       //validating is there any data inside request body
       return res
         .status(400)
-        .send({ status: false, msg: "Please provide the Details" });
+        .send({ status: false, message: "Please provide the Details" });
     }
 
     //validation starts
     if (!isValid(review)) {
-      return res.status(400).send({ status: false, msg: "Review is required" });
+      return res.status(400).send({ status: false, message: "Review is required" });
     }
 
     if (!isValid(rating)) {
-      return res.status(400).send({ status: false, msg: "Rating is required" });
+      return res.status(400).send({ status: false, message: "Rating is required" });
     }
     if (!validRating(rating)) {
       return res
         .status(400)
-        .send({ status: false, msg: "Rating must be between 1 to 5" });
+        .send({ status: false, message: "Rating must be between 1 to 5" });
     }
 
     //the data that we want to show in the response body , i stored in a variable in a  Object form
@@ -113,7 +113,7 @@ const reviewBook = async function (req, res) {
       data: reviewDetails,
     });
   } catch (error) {
-    return res.status(500).send({ status: false, msg: error.message });
+    return res.status(500).send({ status: false, message: error.message });
   }
 };
 
@@ -128,14 +128,14 @@ const updateReview = async function (req, res) {
       //validating is there any data inside request body
       return res.status(400).send({
         status: false,
-        msg: "Please provide the Details in the Request Body",
+        message: "Please provide the Details in the Request Body",
       });
     }
     if (!isValidObjectId(bookId)) {
       // validating bookId is a valid object Id or not
       return res
         .status(400)
-        .send({ status: false, msg: "Please Provide a valid book Id" });
+        .send({ status: false, message: "Please Provide a valid book Id" });
     }
 
     //finding the book from the bookmodel
@@ -152,7 +152,7 @@ const updateReview = async function (req, res) {
       // validating reviewId is a valid object Id or not
       return res
         .status(400)
-        .send({ status: false, msg: "Please Provide a Valid Review Id" });
+        .send({ status: false, message: "Please Provide a Valid Review Id" });
     }
 
     //find the review we want to update
@@ -181,34 +181,34 @@ const updateReview = async function (req, res) {
       if (!isValid(review)) {
         return res
           .status(400)
-          .send({ status: false, msg: "Please provide valid Review" });
+          .send({ status: false, message: "Please provide valid Review" });
       }
     }
     if (rating) {
       if (!isValid(rating)) {
         return res
           .status(400)
-          .send({ status: false, msg: "Please Provide a valid Rating" });
+          .send({ status: false, message: "Please Provide a valid Rating" });
       }
     }
     if (rating) {
       if (!validRating(rating)) {
         return res
           .status(400)
-          .send({ status: false, msg: "Rating must be between 1 to 5" });
+          .send({ status: false, message: "Rating must be between 1 to 5" });
       }
     }
     if (reviewedBy) {
       if (!validName.test(reviewedBy)) {
         return res
           .status(400)
-          .send({ status: false, msg: "reviewer name cannot be a number" });
+          .send({ status: false, message: "reviewer name cannot be a number" });
       }
 
       if (!isValid(reviewedBy)) {
         return res
           .status(400)
-          .send({ status: false, msg: "Please provide a valid reviewer name" });
+          .send({ status: false, message: "Please provide a valid reviewer name" });
       }
     } // validation ends
 
@@ -263,13 +263,13 @@ const deleteReview = async function (req, res) {
     if (!bookId) {
       return res
         .status(400)
-        .send({ status: false, msg: "book Id is required" });
+        .send({ status: false, message: "book Id is required" });
     }
     if (!isValidObjectId(bookId)) {
       // validating reviewId is a valid object Id or not
       return res
         .status(400)
-        .send({ status: false, msg: "Please provide a valid Book Id" });
+        .send({ status: false, message: "Please provide a valid Book Id" });
     }
 
     let reviewId = req.params.reviewId; //writing the review Id in the params we want to fetch detail about
@@ -278,11 +278,11 @@ const deleteReview = async function (req, res) {
     if (!reviewId)
       return res
         .status(400)
-        .send({ status: false, msg: "review Id is required" });
+        .send({ status: false, message: "review Id is required" });
     if (!isValidObjectId(reviewId)) {
       return res
         .status(400)
-        .send({ status: false, msg: "Please provide a valid review Id" });
+        .send({ status: false, message: "Please provide a valid review Id" });
     }
 
     //find the id of the review which have isDeleted as False
@@ -306,7 +306,7 @@ const deleteReview = async function (req, res) {
     if (!findreview) {
       return res
         .status(400)
-        .send({ status: false, msg: "Already been Deleted" });
+        .send({ status: false, message: "Already been Deleted" });
     } else {
       await reviewmodel.findByIdAndUpdate(
         //updating the review with is Deleted as True
@@ -322,7 +322,7 @@ const deleteReview = async function (req, res) {
       { $inc: { reviews: -1 } }
     );
 
-    return res.status(200).send({ status: true, msg: "Review is Deleted" });
+    return res.status(200).send({ status: true, message: "Review is Deleted" });
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message });
   }
