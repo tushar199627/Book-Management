@@ -53,11 +53,15 @@ const reviewBook = async function (req, res) {
 
     //validation starts
     if (!isValid(review)) {
-      return res.status(400).send({ status: false, message: "Review is required" });
+      return res
+        .status(400)
+        .send({ status: false, message: "Review is required" });
     }
 
     if (!isValid(rating)) {
-      return res.status(400).send({ status: false, message: "Rating is required" });
+      return res
+        .status(400)
+        .send({ status: false, message: "Rating is required" });
     }
     if (!validRating(rating)) {
       return res
@@ -95,7 +99,7 @@ const reviewBook = async function (req, res) {
         review: bookDetail.reviews,
         releasedAt: bookDetail.releasedAt,
         createdAt: bookDetail.createdAt,
-        updatedAt: bookDetail.updatedAt
+        updatedAt: bookDetail.updatedAt,
       },
       bookReview: {
         _id: `ObjectId(${bookReview._id})`,
@@ -103,7 +107,7 @@ const reviewBook = async function (req, res) {
         reviewedBy: bookReview.reviewedBy,
         reviewedAt: bookReview.reviewedAt,
         rating: bookReview.rating,
-        review: bookReview.review
+        review: bookReview.review,
       },
     };
 
@@ -208,7 +212,10 @@ const updateReview = async function (req, res) {
       if (!isValid(reviewedBy)) {
         return res
           .status(400)
-          .send({ status: false, message: "Please provide a valid reviewer name" });
+          .send({
+            status: false,
+            message: "Please provide a valid reviewer name",
+          });
       }
     } // validation ends
 

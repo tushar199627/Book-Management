@@ -72,7 +72,10 @@ const createBook = async function (req, res) {
     if (!checkid) {
       return res
         .status(400)
-        .send({ status: false, message: "user dosenot exis with this user id" });
+        .send({
+          status: false,
+          message: "user dosenot exis with this user id",
+        });
     }
     if (!isValid(ISBN)) {
       return res
@@ -130,7 +133,9 @@ const createBook = async function (req, res) {
     //checking weather the ISBN is already present in the database or not
     let ISBNCheck = await bookmodel.findOne({ ISBN: ISBN });
     if (ISBNCheck) {
-      return res.status(400).send({ status: false, message: "ISBN already exist" });
+      return res
+        .status(400)
+        .send({ status: false, message: "ISBN already exist" });
     } //validation ended here
 
     requestBody.releasedAt = new Date().getTime();
@@ -200,7 +205,9 @@ const getBookById = async function (req, res) {
     let findBook = await bookmodel.findById({ _id: bookId });
 
     if (!findBook) {
-      return res.status(404).send({ status: false, message: "Book Id not found" });
+      return res
+        .status(404)
+        .send({ status: false, message: "Book Id not found" });
     }
 
     //checking wheather the book is deleted or not if it is deleted it should returnthe below response
@@ -293,7 +300,10 @@ const updateBook = async function (req, res) {
       if (isAllreadyExistTitle) {
         return res
           .status(400)
-          .send({ status: false, message: `${title} - title is allready exist` });
+          .send({
+            status: false,
+            message: `${title} - title is allready exist`,
+          });
       }
     }
     //validation

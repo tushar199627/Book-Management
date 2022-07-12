@@ -1,6 +1,14 @@
 const jwt = require("jsonwebtoken");
 const usermodel = require("../model/usermodel");
-const {isValid, isValidRequestBody, validPassword, validCity, validPincode, validName, validPhone, validEmail,
+const {
+  isValid,
+  isValidRequestBody,
+  validPassword,
+  validCity,
+  validPincode,
+  validName,
+  validPhone,
+  validEmail,
 } = require("../validator/validate");
 
 //================================================CREATE USER===========================================================================//
@@ -21,7 +29,10 @@ let createUser = async function (req, res) {
     if (!isValid(title)) {
       return res
         .status(400)
-        .send({status: false, message: "Please provide a Title or a Valid title", });
+        .send({
+          status: false,
+          message: "Please provide a Title or a Valid title",
+        });
     }
     if (title != "Mr" && title != "Miss" && title != "Mrs") {
       return res
@@ -32,7 +43,10 @@ let createUser = async function (req, res) {
     if (!isValid(name)) {
       return res
         .status(400)
-        .send({ status: false, message: "Please provide a Name or a Valid Name" });
+        .send({
+          status: false,
+          message: "Please provide a Name or a Valid Name",
+        });
     }
 
     if (!validName.test(name)) {
@@ -82,7 +96,10 @@ let createUser = async function (req, res) {
     if (isAllreadyExistEmail) {
       return res
         .status(400)
-        .send({ status: false, message: `this email id -${email} already exist` });
+        .send({
+          status: false,
+          message: `this email id -${email} already exist`,
+        });
     }
 
     if (!isValid(password)) {
@@ -95,7 +112,8 @@ let createUser = async function (req, res) {
     if (!validPassword(password)) {
       return res.status(400).send({
         status: false,
-        message: "Password Should be Minimum 8 Character and Maximum 15 Character Long",
+        message:
+          "Password Should be Minimum 8 Character and Maximum 15 Character Long",
       });
     }
 
@@ -134,7 +152,8 @@ let createUser = async function (req, res) {
     if (!validPincode.test(address.pincode)) {
       return res.status(400).send({
         status: false,
-        message: "Please enter a valid Pincode, it should not be alpabetic and should be 6 digit long",
+        message:
+          "Please enter a valid Pincode, it should not be alpabetic and should be 6 digit long",
       });
     } //validation ended here
 
@@ -186,7 +205,8 @@ let userLogin = async function (req, res) {
     if (!validPassword(password)) {
       return res.status(400).send({
         status: false,
-        message: "Password Should be Minimum 8 Character and Maximum 15 Character Long",
+        message:
+          "Password Should be Minimum 8 Character and Maximum 15 Character Long",
       });
     } //validation ended here
 
@@ -217,7 +237,11 @@ let userLogin = async function (req, res) {
     //after token created successfully then token will be provided in the response body
     return res
       .status(200)
-      .send({ status: true, token: token, message: "User Logged in Successfully" }); //sending data in response
+      .send({
+        status: true,
+        token: token,
+        message: "User Logged in Successfully",
+      }); //sending data in response
   } catch (error) {
     res.status(500).send({ status: false, error: error.message });
   }
