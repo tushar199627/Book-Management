@@ -15,7 +15,7 @@ const {
 const createBook = async function (req, res) {
   try {
     let requestBody = req.body; //getting data from request body
-    let { title, excerpt, userId, ISBN, category, subcategory, releasedAt } =
+    let { title, excerpt, userId, ISBN, category, subcategory, releasedAt,bookCover } =
       requestBody; //Destructuring data coming from request body
 
     if (isValidRequestBody(requestBody)) {
@@ -135,6 +135,13 @@ const createBook = async function (req, res) {
       return res.status(400).send({
         status: false,
         message: "Released Date should be in YYYY-MM-DD format",
+      });
+  
+    }
+    if (!isValid(bookCover)) {
+      return res.status(400).send({
+        status: false,
+        message: "Please provide a bookcover link",
       });
     }
 
