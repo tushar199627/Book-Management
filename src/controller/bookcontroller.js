@@ -428,7 +428,7 @@ const deleteBook = async function (req, res) {
     let findBook = await bookmodel.findById({ _id: bookId });
 
     if (findBook.isDeleted === true) {
-      return res.status(400).send({
+      return res.status(404).send({
         status: false,
         message: "Book Already been Deleted",
       });

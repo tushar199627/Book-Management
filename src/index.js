@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose
   .connect(
-    "mongodb+srv://tusharbarai1:Tb88774411@cluster0.3hlrc.mongodb.net/group52Database",
+    "mongodb+srv://tusharbarai1:Tb88774411@cluster0.3hlrc.mongodb.net/group",
     {
       useNewUrlParser: true,
     }
