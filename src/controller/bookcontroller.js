@@ -1,7 +1,6 @@
 const bookmodel = require("../model/bookmodel");
 const usermodel = require("../model/usermodel");
 const reviewmodel = require("../model/reviewmodel");
-
 const {
   isValid,
   isValidRequestBody,
@@ -15,7 +14,7 @@ const {
 const createBook = async function (req, res) {
   try {
     let requestBody = req.body; //getting data from request body
-    let { title, excerpt, userId, ISBN, category, subcategory, releasedAt,bookCover } =
+    let { title, excerpt, userId, ISBN, category, subcategory, releasedAt} =
       requestBody; //Destructuring data coming from request body
 
     if (isValidRequestBody(requestBody)) {
@@ -138,12 +137,7 @@ const createBook = async function (req, res) {
       });
   
     }
-    if (!isValid(bookCover)) {
-      return res.status(400).send({
-        status: false,
-        message: "Please provide a bookcover link",
-      });
-    }
+
 
     //checking weather the title is already present in the database or not
     let titleCheck = await bookmodel.findOne({ title: title });
@@ -158,6 +152,7 @@ const createBook = async function (req, res) {
       return res
         .status(400)
         .send({ status: false, message: "ISBN already exist" });
+        
     } //validation ended here
 
     //after clearing all the validation document will be created

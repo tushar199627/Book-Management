@@ -15,7 +15,7 @@ app.use( multer().any())
 
 mongoose
   .connect(
-    "mongodb+srv://tusharbarai1:Tb88774411@cluster0.3hlrc.mongodb.net/group",
+    "mongodb+srv://tusharbarai1:Tb88774411@cluster0.3hlrc.mongodb.net/group1",
     {
       useNewUrlParser: true,
     }
