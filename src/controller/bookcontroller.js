@@ -1,7 +1,7 @@
 const bookmodel = require("../model/bookmodel");
 const usermodel = require("../model/usermodel");
 const reviewmodel = require("../model/reviewmodel");
-
+const {uploadFile} = require("../aws/aws");
 const {
   isValid,
   isValidRequestBody,
@@ -15,6 +15,12 @@ const {
 const createBook = async function (req, res) {
   try {
     let requestBody = req.body; //getting data from request body
+    let files= req.files
+    if(files.length==0){
+      return res
+        .status(400)
+        .send({ status: false, message: "please provide url" });
+    }
     let { title, excerpt, userId, ISBN, category, subcategory, releasedAt,bookCover } =
       requestBody; //Destructuring data coming from request body
 
@@ -113,18 +119,18 @@ const createBook = async function (req, res) {
     }
 
     //checking wheather the subcategory is an array or not
-    if (!Array.isArray(subcategory)) {
-      return res
-        .status(400)
-        .send({ status: false, message: "SubCatagogy Must be in Array" });
-    }
-    if (Array.isArray(subcategory)) {
-      if (subcategory.length == 0) {
-        return res
-          .status(400)
-          .send({ status: false, message: "SubCatagogy cannot be empty" });
-      }
-    }
+    // if (!Array.isArray(subcategory)) {
+    //   return res
+    //     .status(400)
+    //     .send({ status: false, message: "SubCatagogy Must be in Array" });
+    // }
+    // if (Array.isArray(subcategory)) {
+    //   if (subcategory.length == 0) {
+    //     return res
+    //       .status(400)
+    //       .send({ status: false, message: "SubCatagogy cannot be empty" });
+    //   }
+    // }
     if (!isValid(releasedAt)) {
       return res.status(400).send({
         status: false,
@@ -138,12 +144,12 @@ const createBook = async function (req, res) {
       });
   
     }
-    if (!isValid(bookCover)) {
-      return res.status(400).send({
-        status: false,
-        message: "Please provide a bookcover link",
-      });
-    }
+    // if (!isValid(bookCover)) {
+    //   return res.status(400).send({
+    //     status: false,
+    //     message: "Please provide a bookcover link",
+    //   });
+    // }
 
     //checking weather the title is already present in the database or not
     let titleCheck = await bookmodel.findOne({ title: title });
@@ -159,6 +165,9 @@ const createBook = async function (req, res) {
         .status(400)
         .send({ status: false, message: "ISBN already exist" });
     } //validation ended here
+
+    let uploadedFileURL= await uploadFile( files[0] )
+      requestBody.bookCover=uploadedFileURL
 
     //after clearing all the validation document will be created
     let createBook = await bookmodel.create(requestBody);
